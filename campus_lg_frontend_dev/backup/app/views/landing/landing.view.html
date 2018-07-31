@@ -1,0 +1,169 @@
+<section class="slider-section relative" ng-if="$root.userIsLogged">
+    <div class="container">
+        <div class="slider-section-white-mask white-background"></div>
+        <div class="slider-section-gray-mask"></div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="relative">
+                    <div class="slider-section-background">
+                        <div class="section-loading" ng-show="sectionLoading">
+                            <div class="section-loading-inner section-loading-inner-white">
+                                <img src="assets/img/loader-white.svg">
+                                <div>Carregando...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slider-section-container relative">
+                    <div class="swiper-container home-slider"  ng-show="!sectionLoading">
+                        <div class="swiper-wrapper text-center">
+                            <div class="swiper-slide" ng-repeat="sliderItem in $root.sliderItems track by $index">
+                                <div class="slider-section-container-inner">
+                                    <img ng-src="{{sliderItem.PhotoPath}}" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="landing-section training-section relative" ng-if="$root.userIsLogged">
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="section-title">
+                    <h2>Treinamentos</h2>
+                    <div class="section-title-divider"></div>
+                </div>
+                <p class="training-paragraph">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec viverra sit amet nibh ac cursus.
+                    In sed augue quis sem mollis sodales. Suspendisse ac cursus est, id faucibus turpis. Mauris
+                    sodales velit in elit feugiat convallis. Nulla porttitor euismod fermentum. Fusce placerat
+                    tempor eros, a dapibus odio luctus lacinia. Aliquam nec porta ligula. Proin ut pulvinar sem.
+                    Curabitur ut fermentum neque
+                </p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section class="inner-featured-prods relative" ng-if="$root.userIsLogged">
+
+    <div class="section-loading" ng-show="sectionLoading">
+        <div class="section-loading-inner section-loading-inner-white">
+            <img src="assets/img/loader-white.svg">
+            <div>Carregando...</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3" ng-if="$root.userIsLogged">
+                <div class="progress-loader-container">
+                    <div id="mainProgressLoader"></div>
+                </div>
+            </div>
+            <div class="col-md-{{$root.userIsLogged ? '9' : '12'}}">
+                <div class="featured-modules-container">
+                    <div class="section-title">
+                        <h2>Produtos em <strong>destaque</strong></h2>
+                        <div class="section-title-divider"></div>
+                    </div>
+
+                    <div class="featured-modules-inner">
+
+                        <div class="swiper-container featured-products-slider">
+                            <div class="swiper-wrapper text-center">
+                                <div class="swiper-slide relative categories-slide featured-products-slider" ng-repeat="product in featuredProductsList track by $index">
+                                    <div class="featured-modules-item-wrapper"  ng-show="!sectionLoading">
+                                        <div class="hover-top with-transition"></div>
+
+                                        <div class="featured-modules-item white-background">
+                                            <a class="featured-modules-item-link" href="/produto/{{product.Id}}">
+                                                <div class="featured-modules-item-img">
+                                                    <img class="img-responsive" src="{{product.PhotoPath}}">
+                                                </div>
+                                                <div class="featured-modules-item-desc">
+                                                    <span>{{product.Name}}</span>
+                                                    <div class="section-title-divider"></div>
+                                                    <p>{{product.Description}}</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="swiper-pagination"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="landing-section categories-section relative" ng-if="$root.userIsLogged">
+    <div class="categories-section-inner">
+        <div class="container with-z-index">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <div class="section-title">
+                        <h2 class="red-color">Produtos por categoria</h2>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                        et dolore magna aliqua. <br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1 mobile-hidden">
+                    <div class="slider-chevron slider-chevron-left" ng-click="$root.goToSlideCategories('prev')">
+                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="categories-wrapper">
+
+                        <div class="swiper-container categories-products-slider">
+                            <div class="swiper-wrapper text-center">
+                                <div class="swiper-slide" ng-repeat="categoryItem in $root.featuredCategories track by $index">
+                                    <div class="categories-item-wrapper relative white-background ">
+
+                                        <div class="categories-item relative text-center"
+                                             style="background-image: url({{categoryItem.MenuCategory.PhotoPath}});">
+                                            <a class="categories-item-link" href="/categoria/{{categoryItem.MenuCategory.Id}}">
+                                            <span>
+                                                {{categoryItem.MenuCategory.Name}}<br>
+                                                <small>{{categoryItem.ProductCount}} produto{{categoryItem.ProductCount > 1 ? 's' : ''}}</small>
+                                            </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-1 mobile-hidden">
+                    <div class="slider-chevron slider-chevron-right" ng-click="$root.goToSlideCategories('next')">
+                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

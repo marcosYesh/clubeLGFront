@@ -1,0 +1,43 @@
+<nav class="navbar main-navbar white-background yamm" ng-if="$root.userIsLogged">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNav">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/" ng-click="$root.windowRefresh('/');">
+                <img class="mobile-hidden" src="assets/img/marca_lg.jpg">
+                <img class="mobile-visible" src="assets/img/marca_lg_mobile.jpg">
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse main-nav-menu dark-gray-color-all" id="mainNav">
+            <ul class="nav navbar-nav text-uppercase">
+                <li ng-repeat="menuItem in $root.menuItems track by $index">
+                    <a href="/categoria/{{menuItem.Id}}/" target="_self" ng-click="$root.windowRefresh('/categoria/' + menuItem.Id + '/')">{{menuItem.Name}}</a>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right" ng-if="$root.userIsLogged">
+                <li class="user-name">
+                    <a>
+                        <strong class="text-uppercase">
+                            <img class="user-thumb  img-circle" src="{{$root.userProfile.PhotoUrl != null ? $root.userProfile.PhotoUrl : '/assets/img/dummy_user.png'}}">
+                            <span>{{$root.userProfile.Name.split(' ')[0]}}</span>
+                        </strong>
+                    </a>
+                    <div class="navbar-user-panel-bar">
+                        <span class="navbar-user-panel-points" data-toggle="dropdown">
+                            {{$root.userProfile.TotalPrize}} <i class="fa fa-chevron-circle-down" aria-hidden="true"></i><br>
+                            <small>Pontos</small>
+                        </span>
+                        <ul class="dropdown-menu">
+                            <li><a ng-click="$root.userLogout()">Sair</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

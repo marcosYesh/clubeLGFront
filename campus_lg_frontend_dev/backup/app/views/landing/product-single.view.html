@@ -1,0 +1,332 @@
+<section class="product-single relative" ng-if="$root.userIsLogged">
+
+    <div class="section-loading" ng-show="sectionLoading">
+        <div class="section-loading-inner">
+            <img src="assets/img/loader.svg">
+            <div>Carregando...</div>
+        </div>
+    </div>
+
+    <div class="container" ng-show="!sectionLoading">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="slider-section-container relative">
+                    <div class="product-has-prize-badge">
+                        <i class="fa fa-trophy"></i> PRODUTO COM PREMIAÇÃO!
+                    </div>
+                    <img ng-src="{{currentProduct.PhotoPath}}">
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="section-title">
+                    <h2>{{currentProduct.Name}}</h2>
+                    <div class="section-title-divider"></div>
+                </div>
+                <p>
+                    {{currentProduct.Description}}
+                </p>
+
+                <div class="product-download-pdf" ng-if="currentProduct.PDFPath != null">
+                    <a href="{{currentProduct.PDFPath}}" target="_blank" title="Baixar PDF do produto">
+                        <img src="assets/img/pdf-download-ico.png">
+                    </a>
+                </div>
+
+                <div class="panel-group product-single-more-info-collapse" ng-if="currentProduct.FullDescription != null">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" ng-click="showProductFullDescription()">
+                            <h4 class="panel-title">
+                                <a class="product-more-info relative" data-toggle="collapse">
+                                    {{isFullDescriptionVisible ? 'Esconder' : 'Visualizar'}} todos os recursos
+                                    <i class="fa fa-angle-up" ng-show="isFullDescriptionVisible" aria-hidden="true"></i>
+                                    <i class="fa fa-angle-down" ng-show="!isFullDescriptionVisible" aria-hidden="true"></i>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="productInfo" class="panel-collapse collapse">
+                            <p ng-bind-html='toTrustedHTML(currentProduct.FullDescription)'></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="landing-section product-video-section gray-pattern-bg" ng-if="$root.userIsLogged">
+    <div class="container">
+        <div class="product-video-section-inner relative {{!currentProduct.ProductHasVideos ? 'no-min-height' : ''}}">
+
+            <div class="section-loading" ng-show="sectionLoading">
+                <div class="section-loading-inner">
+                    <img src="assets/img/loader.svg">
+                    <div>Carregando...</div>
+                </div>
+            </div>
+
+            <div class="row" ng-if="currentProduct.ProductHasVideos" ng-show="!sectionLoading">
+                <div class="col-md-3">
+                    <div class="progress-loader-container">
+                        <div id="mainProgressLoaderInner"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="relative">
+                        <section class="ng-video-container">
+
+                            <div class="video-mask text-center finished-video-mask" ng-if="!currentWatchingVideo.FirstlyPlayed">
+                                <div class="finished-video-mask-inner">
+                                    <br>
+                                    <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong>
+                                    <br>
+                                    <br>
+                                    <p class="inner-video-desc" ng-if="currentWatchingVideoQuestions.QuestionsCount > 0">Este treinamento é composto por {{currentWatchingVideoQuestions.QuestionsCount}} quest{{currentWatchingVideoQuestions.QuestionsCount > 1 ? 'ões' : 'ão'}}, por favor assista com atenção e responda corretamente.</p>
+                                    <p class="inner-video-desc" ng-if="currentWatchingVideoQuestions.QuestionsCount == 0">Como você já visualizou este módulo, iremos exibir apenas o vídeo, sem questões ou pontuação.</p>
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-success finish-btn" ng-click="replayTheVideo(currentWatchingVideo)">Iniciar treinamento <i class="fa fa-play" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+
+                            <div class="video-mask" ng-if="currentWatchingVideo.ShowVideoMask && currentWatchingVideo.FirstlyPlayed">
+                                <div class="video-inner-container">
+                                    <div class="video-inner-container-table">
+                                        <div class="video-question-single" ng-repeat="(index, question) in currentWatchingVideo.ProductVideoQuestionList" ng-show="quizNumber == (index + 1)">
+                                            <div ng-show="question.AnswerType == 2 || question.AnswerType == 3">
+                                                <strong>Questão {{index + 1}}</strong> -
+                                                <small>{{question.AnswerType == 2 ? 'Múltipla escolha com uma correta' : question.AnswerType == 3 ? 'Múltipla escolha com várias corretas' : ''}}</small>
+                                                <br>
+                                                <p>
+                                                    {{question.Question}}
+                                                </p>
+                                                <ul>
+                                                    <li class="quiz-answer" ng-click="answerQuiz(answer, $event, question.AnswerType)" ng-repeat="(indexQ, answer) in question.QuestionItemList" data-correct="{{answer.AnswerCorrect}}">
+                                                        <strong>{{indexQ + 1 | character}}.</strong> {{answer.AnswerOption}}
+                                                        <i class="fa fa-times"></i>
+                                                        <i class="fa fa-check"></i>
+                                                    </li>
+                                                </ul>
+
+
+                                                <div class="question-button-wrapper text-right">
+                                                    <button class="btn btn-success continue-btn" ng-show="showFinishMultipleBtn" ng-click="finishMultipleQuestionAnswer()">Validar <i class="fa fa-check" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-success continue-btn" ng-show="showGoToNextBtn" ng-click="continueVideo(question.Id, $root.openAnswer, false)">Continuar <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
+
+                                            <div ng-show="question.AnswerType == 1" class="open-answer">
+                                                <strong>Questão {{index + 1}}</strong> -
+                                                <small>Texto aberto</small>
+                                                <br>
+                                                <p>
+                                                    {{question.Question}}
+                                                </p>
+
+                                                <textarea ng-model="$root.openAnswer" placeholder="Escreva a resposta da pergunta aqui..."></textarea>
+                                                <p style="margin-top: -12px;">Mínimo 10 caracteres</p>
+                                                <br>
+                                                <button class="btn btn-success pull-right continue-btn" ng-show="showOpenTextGoToNextBtn" ng-click="continueVideo(question.Id, $root.openAnswer, false)">Continuar <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                                            </div>
+
+
+                                            <div ng-show="question.AnswerType == 4" class="informative-text">
+                                                <strong>Questão {{index + 1}}</strong> -
+                                                <small>Texto informativo</small>
+                                                <br>
+                                                <p>
+                                                    {{question.Question}}
+                                                </p>
+
+                                                <br>
+                                                <button class="btn btn-success pull-right continue-btn" ng-click="continueVideo(question.Id, question.Question, true)">Entendi, continuar <i class="fa fa-angle-right" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="video-mask text-center finished-video-mask" ng-if="currentWatchingVideo.videoFinished">
+                                <div class="finished-video-mask-inner">
+                                    <br>
+                                    <strong>Treinamento finalizado!</strong>
+                                    <br>
+                                    <div>
+                                        <div class="rating-stars">
+                                            <div ng-if="!isVideoAlreadyRated">
+                                                <div><h3>Qual foi sua experiência com esse treinamento?</h3></div>
+                                                <span ng-mouseover="setRatingStar($event, star)" ng-mouseleave="setRatingStar($event, star)" ng-repeat="star in selectedRatingStars">
+                                                    <a><i class="fa {{star.class}}"></i></a>
+                                                </span>
+                                            </div>
+                                            <div ng-if="isVideoAlreadyRated">
+                                                <div><h3>Agradecemos pela opinião!</h3></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <button class="btn btn-success finish-btn" ng-if="!isVideoAlreadyRated" ng-click="rateQuizExperience(currentWatchingVideo)">Avaliar</button>
+                                    <button class="btn btn-success finish-btn" ng-if="isVideoAlreadyRated" ng-click="replayTheVideo(currentWatchingVideo)">Reproduzir novamente <i class="fa fa-refresh" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+
+                            <section class="video youtube-video" id="youtubevideoitem" ng-if="isYoutubeVideo">
+                                <youtube-video video-id="currentWatchingVideo.YoutubeVideoId" player="youtubePlayer" player-vars="youtubePlayerOptions"></youtube-video>
+                            </section>
+
+                            <section class="video" ng-video ng-if="!isYoutubeVideo">
+                                <video vi-screen></video>
+                                <div class="video-controls" vi-controls>
+                                    <span vi-controls-play title="Play" class="fa fa-play" ng-if="!$root.playing"></span>
+                                    <span vi-controls-pause title="Pause" class="fa fa-pause" ng-if="$root.playing"></span>
+                                    <div class="pull-right" vi-feedback>
+                                        {{formatTimeToMinSec(currentTime)}} / {{formatTimeToMinSec(duration)}}
+                                    </div>
+                                    <div class="pull-right full-screen-btn vi-full-screen-toggle">
+                                        <i class="fa fa-television" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </section>
+
+
+                            <section class="video" ng-video ng-if="isYoutubeVideo">
+                                <div class="video-controls">
+                                    <span title="Play" class="fa fa-play" ng-if="!$root.playing" ng-click="youtubePlayer.playVideo()"></span>
+                                    <span title="Pause" class="fa fa-pause" ng-if="$root.playing" ng-click="youtubePlayer.pauseVideo()"></span>
+                                    <div class="pull-right">
+                                        {{formatTimeToMinSec(currentTime)}} / {{formatTimeToMinSec(duration)}}
+                                    </div>
+                                    <div class="pull-right full-screen-btn">
+                                        <i class="fa fa-television" aria-hidden="true" ng-click="toggleFullscreenVideo()"></i>
+                                    </div>
+                                </div>
+                            </section>
+
+                        </section>
+                    </div>
+                    <div class="product-single-description">
+                        <h2>
+                            {{currentWatchingVideo.Title}}
+                            <i title="Treinamento sem áudio" class="fa fa-volume-off" ng-show="currentWatchingVideo.AudioType == 0" aria-hidden="true"></i>
+                            <i title="Treinamento com áudio" class="fa fa-volume-up" ng-show="currentWatchingVideo.AudioType == 1" aria-hidden="true"></i>
+                        </h2>
+                        <div class="section-title-divider"></div>
+
+                        <h4>{{currentWatchingVideo.Content}}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-no-video" ng-if="!sectionLoading && !currentProduct.ProductHasVideos">
+                <h2>Este produto não contém nenhum módulo de treinamento.</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="red-pattern" ng-if="currentProduct.ProductHasVideos">
+        <div class="container">
+            <div class="row product-more-videos">
+                <div class="col-md-12">
+                    <div class="featured-modules-container">
+                        <div class="section-title">
+                            <h2>Módulos deste treinamento</h2>
+                            <div class="section-title-divider"></div>
+                        </div>
+                        <div class="featured-modules-inner">
+                            <div class="swiper-container product-modules-slider">
+                                <div class="swiper-wrapper text-center">
+                                    <div class="swiper-slide relative categories-slide" ng-repeat="productModule in currentProduct.ProductVideoList track by $index">
+
+                                        <div class="featured-modules-item-wrapper product-featured">
+                                            <div class="hover-top with-transition"></div>
+                                            <div class="featured-modules-item white-background {{productModule.WasViewed ? 'video-already-shown' : ''}}">
+
+                                                <div class="video-viewering text-center" ng-if="currentVideoId == productModule.Id">
+                                                    VISUALIZANDO <i class="fa fa-play" aria-hidden="true"></i>
+                                                </div>
+
+                                                <a class="featured-modules-item-link product-featured-modules-item-link" ng-click="changecurrentWatchingVideo(productModule)">
+                                                    <div class="featured-modules-item-img">
+                                                        <img ng-if="false" class="img-responsive" src="{{currentProduct.PhotoPath}}">
+                                                    </div>
+                                                    <div class="featured-modules-item-desc">
+                                                        <span class="text-uppercase">{{productModule.Title}}</span>
+
+                                                        <div class="featured-modules-item-points-amount" ng-if="productModule.Prize != undefined && productModule.Prize > 0">
+                                                            <h3>{{productModule.Prize}} PONTOS</h3>
+                                                        </div>
+
+                                                        <div class="section-title-divider"></div>
+                                                        <p>{{productModule.Content}}</p>
+                                                    </div>
+                                                </a>
+                                                <div class="already-shown-mask">MÓDULO JÁ VISUALIZADO</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="swiper-pagination"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+<section class="landing-section categories-section relative" ng-if="$root.userIsLogged">
+    <div class="categories-section-inner">
+        <div class="container with-z-index">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <div class="section-title">
+                        <h2 class="red-color">Produtos por categoria</h2>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                        et dolore magna aliqua. <br>
+                        Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1 mobile-hidden">
+                    <div class="slider-chevron slider-chevron-left" ng-click="$root.goToSlideCategories('prev')">
+                        <i class="fa fa-chevron-circle-left" aria-hidden="true"></i>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="categories-wrapper">
+
+                        <div class="swiper-container categories-products-slider">
+                            <div class="swiper-wrapper text-center">
+                                <div class="swiper-slide" ng-repeat="categoryItem in $root.featuredCategories track by $index">
+                                    <div class="categories-item-wrapper relative white-background ">
+                                        <div class="categories-item relative text-center"
+                                             style="background-image: url({{categoryItem.MenuCategory.PhotoPath}});">
+                                            <a class="categories-item-link" href="/categoria/{{categoryItem.MenuCategory.Id}}">
+                                            <span>
+                                                {{categoryItem.MenuCategory.Name}}<br>
+                                                <small>{{categoryItem.ProductCount}} produto{{categoryItem.ProductCount > 1 ? 's' : ''}}</small>
+                                            </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-xs-1 mobile-hidden">
+                    <div class="slider-chevron slider-chevron-right" ng-click="$root.goToSlideCategories('next')">
+                        <i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

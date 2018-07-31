@@ -1,0 +1,33 @@
+.white-background {
+    background-color: #fff;
+}
+
+.orange-background {
+    background-color: #fa9d00;
+}
+
+.orange-border {
+    border-color: #fa9d00;
+}
+
+.red-color {
+    color: #cf1d42 !important;
+}
+
+.red-background {
+    background-color: #cf1d42 !important;
+}
+
+.dark-gray-color {
+    color: #333;
+}
+
+.dark-gray-color-all,
+.dark-gray-color-all * {
+    color: #333;
+}
+
+.gray-pattern-bg {
+    background-image: url(../../img/bg-gray.jpg);
+    background-repeat: repeat;
+}

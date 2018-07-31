@@ -1,0 +1,74 @@
+<section class="categories-inner full-height relative" ng-controller="MainController">
+
+    <div class="section-loading" ng-show="$root.sectionLoading">
+        <div class="section-loading-inner">
+            <img src="assets/img/loader.svg">
+            <div>Carregando...</div>
+        </div>
+    </div>
+
+    <div class="container full-height categories-inner-section-block" ng-show="!$root.sectionLoading">
+        <div class="row">
+            <div class="col-md-12 section-category-desc">
+                <div class="section-title">
+                    <h2>{{categoryInfo.Name}}</h2>
+                    <div class="section-title-divider"></div>
+                </div>
+                <p>{{categoryInfo.Description}}</p>
+            </div>
+        </div>
+
+        <div class="row full-height">
+            <div class="categories-inner-products-repeater-wrapper">
+                <div class="categories-inner-products-repeater relative" ng-repeat="categoryProduct in $root.categoryProducts as categoryItems track by $index">
+                    <div class="row categories-inner-products relative">
+
+                        <div class="categories-inner-products-featured-badge text-right" ng-show="categoryProduct.IsPromotion">
+                            Promoção<br>
+                            <i class="fa fa-star"></i>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="col-md-2">
+                                <div class="categories-inner-products-img-wrapper">
+                                    <img class="img-responsive" ng-src="{{categoryProduct.PhotoPath}}">
+                                </div>
+                            </div>
+                            <div class="col-md-10 relative">
+
+                                <h2>{{categoryProduct.Name}}</h2>
+                                <div class="section-title-divider"></div>
+                                <p>{{categoryProduct.Description}}</p>
+                                <div class="categories-inner-products-button-wrapper">
+                                    <a href="/produto/{{categoryProduct.Id}}" ng-click="$root.windowRefresh('/produto/' + categoryProduct.Id + '/')">Ver módulos do produto</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="categories-nothing-found" ng-if="categoryItems.length == 0">
+                    <h3>Nenhum produto encontrado para a categoria selecionada.</h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row" ng-show="false">
+            <div class="col-md-12 text-center">
+                <ul class="pagination">
+                    <li class="active"><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li><a href="#"><i class="fa fa-angle-double-right"></i> </a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Raphael Abreu">
+
+    <title>LG Campus - Bem vindo!</title>
+
+    <link href="assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/font-awesome/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/swiper/swiper.min.css" rel="stylesheet">
+
+    <link href="assets/css/lg-club/main.style.css" rel="stylesheet">
+    <link href="assets/css/lg-club/color-palette.style.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div ng-app="LGApp" class="gray-pattern-bg">
+
+    <div ng-include="'app/views/generic/navbar.view.generic.html'"></div>
+    <ng-view></ng-view>
+    <div ng-include="'app/views/generic/user.not.logged.generic.view.html'"></div>
+    <div ng-include="'app/views/generic/footer.view.generic.html'"></div>
+</div>
+
+<script src="assets/js/jquery/jquery-3.2.1.min.js" type="application/javascript"></script>
+<script src="assets/js/bootstrap/bootstrap.min.js" type="application/javascript"></script>
+
+<script src="assets/js/angular/angular.min.js" type="application/javascript"></script>
+<script src="assets/js/angular/angular-route.min.js" type="application/javascript"></script>
+<script src="assets/js/angular/angular-cookies.min.js" type="application/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-sanitize.min.js"></script>
+
+<script src="assets/js/directives/ngVideo/ng-video.js" type="application/javascript"></script>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script src="assets/js/directives/angular-youtube-embed.min.js" type="application/javascript"></script>
+
+<script src="app/controllers/main.controller.js" type="application/javascript"></script>
+
+<script src="app/services/api.service.js" type="application/javascript"></script>
+
+<script src="app/app.routes.js" type="application/javascript"></script>
+
+
+<script src="assets/js/swiper/swiper.min.js" type="application/javascript"></script>
+<script src="assets/js/percentageloader/jquery.percentageloader-0.2.js" type="application/javascript"></script>
+</body>
+</html>
