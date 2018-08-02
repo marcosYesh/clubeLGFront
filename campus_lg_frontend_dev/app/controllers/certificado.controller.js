@@ -5,7 +5,7 @@ LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies
             html2canvas(document.body, {
                 onrendered: function(canvas) {
                     // document.body.appendChild(canvas);
-    				var data = canvas.toDataURL();
+    				var data = "Olá mundo!";
                     var docDefinition = {
                         content: [{
                             image: data,
