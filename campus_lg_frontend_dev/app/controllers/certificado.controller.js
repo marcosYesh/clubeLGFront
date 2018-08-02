@@ -2,7 +2,7 @@ LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies
         $timeout(function () {
             $rootScope.userAuthWithSessionId(function (userResponse) {})
             
-            html2canvas(document.body, {
+            html2canvas(document.getElementById('ContentPrint'), {
                 onrendered: function(canvas) {
                     // document.body.appendChild(canvas);
     				var data = canvas.toDataURL();
