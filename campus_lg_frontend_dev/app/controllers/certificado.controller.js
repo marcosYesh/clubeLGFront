@@ -7,10 +7,11 @@ LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies
                     // document.body.appendChild(canvas);
     				var data = canvas.toDataURL();
                     var docDefinition = {
+                    	pageOrientation: 'landscape',	
                         content: [{
                             image: data,
-                            width: 600,
-    						pageOrientation: 'landscape'
+                            width: 600
+    						
                         }]
                     };
                     pdfMake.createPdf(docDefinition).download();
