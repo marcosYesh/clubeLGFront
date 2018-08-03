@@ -2,6 +2,7 @@ LGApp.controller("CertificadoController", function($scope, $rootScope,
 		$cookies, $location, $timeout, video, apiService, $sce, $http,
 		$interval, $routeParams, $route) {
 	$scope.nome = "";
+	$scope.currentVideoId = $location.search().video != undefined ? $location.search().video : null;
 
 	$timeout(function() {
 		$rootScope.userAuthWithSessionId(function(userResponse) {
