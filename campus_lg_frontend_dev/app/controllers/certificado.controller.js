@@ -3,7 +3,7 @@ LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies
 	
 	    $timeout(function () {
             $rootScope.userAuthWithSessionId(function (userResponse) {
-            	
+            	$scope.nome = "Bruno";
             	
             	html2canvas(document.getElementById('ContentPrint'), {
                     onrendered: function(canvas) {
