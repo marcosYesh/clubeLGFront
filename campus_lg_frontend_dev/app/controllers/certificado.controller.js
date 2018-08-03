@@ -17,7 +17,7 @@ LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies
         						
                             }]
                         };
-                        pdfMake.createPdf(docDefinition).download();
+                        pdfMake.createPdf(docDefinition).print();
                     }
                 });	
             	
