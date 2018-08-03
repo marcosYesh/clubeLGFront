@@ -1,9 +1,14 @@
 LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies, $location, $timeout) {
-	    $scope.nome = "bruno";
+	    $scope.nome = "";
 	
 	    $timeout(function () {
             $rootScope.userAuthWithSessionId(function (userResponse) {
-            	$scope.nome = "Bruno";
+            	apiService.authenticate(1, userResponse.Token).then(function (response) {
+            		$scope.nome = response.data.ReturnData.Name;            		
+                });
+            	
+            	
+            	
             	
             	html2canvas(document.getElementById('ContentPrint'), {
                     onrendered: function(canvas) {
@@ -17,7 +22,7 @@ LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies
         						
                             }]
                         };
-                        pdfMake.createPdf(docDefinition).print();
+                        pdfMake.createPdf(docDefinition).download();
                     }
                 });	
             	
