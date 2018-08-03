@@ -1,4 +1,4 @@
-LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies, $location, $timeout) {
+LGApp.controller("CertificadoController", function ($scope, $rootScope, $cookies, $location, $timeout,apiService) {
 	    $scope.nome = "";
 	
 	    $timeout(function () {
