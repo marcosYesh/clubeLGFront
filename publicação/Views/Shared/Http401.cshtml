@@ -1,0 +1,29 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="error-container">
+        <div class="error-code">
+            401
+        </div>
+        <div class="error-details">
+            <h4>Ooops, <span class="text-primary">Sem permissão de acesso</span>.</h4>
+            <p>Você não está autorizado à acessar essa página. Se você realmente precisa de ter acesso a esse recurso, entre em contato com a equipe de suporte</p>
+
+            <form class="form">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Procurar...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

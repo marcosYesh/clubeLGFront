@@ -1,0 +1,69 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.ProductListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Buscar >> Produto</u>
+        </h3>
+
+        <div class="portlet-body">
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <form id="index" method="POST" class="form">
+                    <div class="row container">
+                        @if ((SelectList)ViewData["MenuCategoryList"] != null)
+                        {
+                            <div class="pull-left" style="margin-right: 5px;">
+                                <label style="display: block">Categoria Pai</label>
+                                @Html.DropDownListFor(m => m.SearchParameter.FatherMenuCategoryId, (SelectList)ViewData["MenuCategoryList"], String.Format("-- {0} --", "Selecionar"), new { @class = "form-control" })
+                            </div>
+                        }
+                    </div>
+                    <br />
+                    <div class="row container">
+                        <input type="submit" class="btn btn-danger blockButton" value="Buscar" />
+                        <a class="btn btn-default" href="/produto">Novo</a>
+                    </div>
+                </form>
+                <br />
+                <hr />
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+                        {
+                            columns.Add().Encoded(false).Sanitized(false).RenderValueAs((d => @<a href="@d.PhotoPath" class="viewPhotoPath"><img src="@d.PhotoPath" style="width: 20px;" /></a>));
+                            columns.Add(model => model.FatherMenuName).Titled("Categoria Pai");
+                            columns.Add(model => model.Name).Titled("Nome");
+                            columns.Add(model => model.Description).Titled("Descrição");
+                            columns.Add(model => model.IsFeatured).Titled("Destaque?");
+                            columns.Add(model => model.IsLaunch).Titled("Lançamento?");
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/produto/@d.Id/videos" class="btn btn-xs btn-primary"><i class="fa fa-video-camera"></i></a>);
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/produto/@d.Id'"><i class="fa fa-pencil"></i></button>));
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/produto/@d.Id/remover" class="btn btn-xs btn-secondary confirmDialog"><i class="fa fa-times"></i></a>);
+                        })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

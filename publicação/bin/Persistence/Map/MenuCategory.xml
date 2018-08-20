@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="MenuCategory" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="MenuCategoryAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.MenuCategory, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="MenuCategorySearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.MenuCategorySearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="MenuCategoryResult" class="MenuCategoryAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="FatherMenuCategoryId"               column="id_menu_category_father"        type="Int32"         dbType="integer"/>
+      <result property="Name"                               column="str_name"                       type="String"        dbType="varchar"/>
+      <result property="Description"                        column="str_description"                type="String"        dbType="varchar"/>
+      <result property="PhotoPath"                          column="str_photopath"                  type="String"        dbType="varchar"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="MenuCategoryResult">
+      <![CDATA[
+        select id, id_menu_category_father, str_name, str_description, str_photopath, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_menu_category
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="MenuCategoryResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByRoot" resultMap="MenuCategoryResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_menu_category_father = 0 and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectAllActive" resultMap="MenuCategoryResult" extends="SelectAll">
+      <![CDATA[
+        where ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByFatherMenuCategoryId" resultMap="MenuCategoryResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_menu_category_father = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectMenuTree" resultMap="MenuCategoryResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="MenuCategorySearchParameterAlias" resultMap="MenuCategoryResult">
+      <![CDATA[
+            select  id, id_menu_category_father, str_name, str_description, str_photopath, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_menu_category
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="FatherMenuCategoryId" prepend="AND">
+          <![CDATA[(id_menu_category_father = #FatherMenuCategoryId# or id = #FatherMenuCategoryId#)]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="MenuCategorySearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_menu_category
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="FatherMenuCategoryId" prepend="AND">
+          <![CDATA[(id_menu_category_father = #FatherMenuCategoryId# or id = #FatherMenuCategoryId#)]]>
+        </isNotNull>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="MenuCategoryAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_menu_category (id_menu_category_father, str_name, str_description, str_photopath, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#FatherMenuCategoryId#, #Name#, #Description#, #PhotoPath#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="MenuCategoryAlias">
+      <![CDATA[
+        update 
+          tb_menu_category 
+        set 
+          id_menu_category_father = #FatherMenuCategoryId#,
+          str_name = #Name#,
+          str_description = #Description#,
+          str_photopath = #PhotoPath#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_menu_category
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

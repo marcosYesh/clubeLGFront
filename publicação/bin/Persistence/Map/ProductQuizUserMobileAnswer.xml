@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="ProductQuizUserMobileAnswer" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductQuizUserMobileAnswerAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ProductQuizUserMobileAnswer, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ProductQuizUserMobileAnswerSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.ProductQuizUserMobileAnswerSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="ProductQuizUserMobileAnswerResult" class="ProductQuizUserMobileAnswerAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="UserMobileId"                       column="id_usermobile"                  type="Int32"         dbType="integer"/>
+      <result property="ProductVideoId"                     column="id_product_video"               type="Int32"         dbType="integer"/>
+      <result property="ProductQuizId"                      column="id_product_quiz"                type="Int32"         dbType="integer"/>
+      <result property="ProductQuizItemId"                  column="id_product_quiz_item"           type="Int32"         dbType="integer"/>
+      <result property="AnswerCorrect"                      column="ind_answer_correct"             type="Boolean"       dbType="bit"/>
+      <result property="ProductQuiz"                        column="str_product_quiz"               type="String"        dbType="varchar"/>
+      <result property="ProductQuizItem"                    column="str_product_quiz_item"          type="String"        dbType="varchar"/>
+      <result property="AnswerType"                         column="int_answer_type"                type="MBLabs.LGClubeWebBackendLib.Enumerator.AnswerType"        dbType="integer" />
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductQuizUserMobileAnswerResult">
+      <![CDATA[
+        select id, id_usermobile, id_product_video, id_product_quiz, id_product_quiz_item, ind_answer_correct, str_product_quiz, str_product_quiz_item, int_answer_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_product_quiz_usermobile_answer
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductQuizUserMobileAnswerResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByQuestionId" resultMap="ProductQuizUserMobileAnswerResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product_quiz = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByProductVideoId" resultMap="ProductQuizUserMobileAnswerResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product_video = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByQuestionIdAndUserMobileId" resultMap="ProductQuizUserMobileAnswerResult" extends="SelectAll" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        where id_product_quiz = #questionId# and id_usermobile = #userMobileId# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByUserMobileIdAndVideoId" resultMap="ProductQuizUserMobileAnswerResult" extends="SelectAll" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        where id_product_video = #productVideoId# and id_usermobile = #userMobileId# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByUserMobileId" resultMap="ProductQuizUserMobileAnswerResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_usermobile = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="ProductQuizUserMobileAnswerSearchParameterAlias" resultMap="ProductQuizUserMobileAnswerResult">
+      <![CDATA[
+            select id, id_product_video, id_usermobile, id_product_quiz, id_product_quiz_item, ind_answer_correct, str_product_quiz, str_product_quiz_item, int_answer_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+            from    ( 
+                       select 
+                          row_number() over ( order by id desc) as RowNum, *
+                       from 
+                          tb_product_quiz_usermobile_answer
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="QuestionId" prepend="AND">
+          <![CDATA[id_product_quiz = #QuestionId#]]>
+        </isNotNull>
+        <isNotNull property="VideoId" prepend="AND">
+          <![CDATA[id_product_video = #VideoId#]]>
+        </isNotNull>
+        <isNotNull property="UserMobileId" prepend="AND">
+          <![CDATA[id_usermobile = #UserMobileId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="ProductQuizUserMobileAnswerSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_product_quiz_usermobile_answer
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="QuestionId" prepend="AND">
+          <![CDATA[id_product_quiz = #QuestionId#]]>
+        </isNotNull>
+        <isNotNull property="VideoId" prepend="AND">
+          <![CDATA[id_product_video = #VideoId#]]>
+        </isNotNull>
+        <isNotNull property="UserMobileId" prepend="AND">
+          <![CDATA[id_usermobile = #UserMobileId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductQuizUserMobileAnswerAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product_quiz_usermobile_answer (id_usermobile, id_product_video, id_product_quiz, id_product_quiz_item, ind_answer_correct, str_product_quiz, str_product_quiz_item, int_answer_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#UserMobileId#, #ProductVideoId#, #ProductQuizId#, #ProductQuizItemId#, #AnswerCorrect#, #ProductQuiz#, #ProductQuizItem#, #AnswerType#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="ProductQuizUserMobileAnswerAlias">
+      <![CDATA[
+        update 
+          tb_product_quiz_usermobile_answer 
+        set 
+          id_usermobile = #UserMobileId#, 
+          id_product_video = #ProductVideoId#,
+          id_product_quiz = #ProductQuizId#, 
+          id_product_quiz_item = #ProductQuizItemId#, 
+          ind_answer_correct = #AnswerCorrect#, 
+          str_product_quiz = #ProductQuiz#, 
+          str_product_quiz_item = #ProductQuizItem#,
+          int_answer_type = #AnswerType#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_quiz_usermobile_answer
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

@@ -1,0 +1,75 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.UserListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Buscar >> Administradores</u>
+        </h3>
+
+        <div class="portlet-body">
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <form id="index" method="POST" class="form">
+                    <div class="row dt-rt">
+                        <div class="col-sm-6">
+                            <div class="form-group pull-left">
+                                <a href="/admin" type="submit" class="btn btn-default">Novo Administrador</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                        </div>
+                    </div>
+                    <div class="row container">
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Nome</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.Name, new { @class = "form-control" })
+                        </div>
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Perfil</label>
+                            @Html.DropDownListFor(m => m.SearchParameter.ProfileType, (SelectList)ViewData["ProfileTypeList"], String.Format("-- {0} --", "Selecionar"), new { @class = "form-control state-list" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row container">
+                        <input type="submit" class="btn btn-danger blockButton" value="Buscar" />
+                    </div>
+                </form>
+                <br />
+                <hr />
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+                        {
+                            columns.Add(model => model.Email).Titled("Email");
+                            columns.Add(model => model.Name).Titled("Nome");
+                            columns.Add(model => model.ProfileType).Titled("Perfil");
+                            columns.Add(model => model.DtInsert).Titled("D/H Registro");
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/admin/@d.Id'"><i class="fa fa-pencil"></i></button>));
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/admin/remover/@d.Id" class="btn btn-xs btn-secondary confirmDialog"><i class="fa fa-times"></i></a>);
+                        })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

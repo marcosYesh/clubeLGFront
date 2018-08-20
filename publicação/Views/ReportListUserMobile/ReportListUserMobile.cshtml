@@ -1,0 +1,84 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.ReportListUserMobileListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Relatório >> Usuários</u>
+        </h3>
+
+        <div class="portlet-body">
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <form id="index" method="POST" class="form">
+                    <div class="row container">
+                        @if ((SelectList)ViewData["MenuCategoryList"] != null)
+                        {
+                            <div class="pull-left" style="margin-right: 5px;">
+                                <label style="display: block">Categorias</label>
+                                @Html.DropDownListFor(m => m.SearchParameter.MenuCategoryId, (SelectList)ViewData["MenuCategoryList"], String.Format("-- {0} --", "Selecionar"), new { @class = "form-control" })
+                            </div>
+                        }
+                        @if ((SelectList)ViewData["PermissionList"] != null)
+                        {
+                            <div class="pull-left" style="margin-right: 5px;">
+                                <label style="display: block">Canais</label>
+                                @Html.DropDownListFor(m => m.SearchParameter.PermissionId, (SelectList)ViewData["PermissionList"], String.Format("-- {0} --", "Selecionar"), new { @class = "form-control" })
+                            </div>
+                        }
+
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Data Inicial</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.DtBegin, new { data_required = "true", @class = "form-control date_time" })
+                        </div>
+
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Data de Término</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.DtEnd, new { data_required = "true", @class = "form-control date_time" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row container">
+                        <input type="submit" class="btn btn-danger blockButton" value="Buscar" />
+                    </div>
+                </form>
+                <br />
+                <hr />
+
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+               {
+               columns.Add(model => model.UserMobileName).Titled("Usuário");
+               columns.Add(model => model.DtAnswer).Titled("Data de Visualização");
+               columns.Add(model => model.VideoTitle).Titled("Treinamento");
+               columns.Add(model => model.AnswerCorrectCount).Titled("Respostas Corretas");
+               columns.Add(model => model.AnswerWrongCount).Titled("Respostas Incorretas");
+               columns.Add(model => model.IsWinPrize).Titled("Meta Atingida");
+               columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/relatorio/@d.UserMobileId/detalhe/@d.VideoId" class="btn btn-xs btn-secondary"><i class="fa fa-link"></i></a>);
+                    })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("ReportListUserMobile", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

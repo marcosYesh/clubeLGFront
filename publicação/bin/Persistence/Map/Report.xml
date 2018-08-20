@@ -1,0 +1,380 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="Report" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ReportListGoalAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ReportListGoal, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ReportListUserMobileAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ReportListUserMobile, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ReportUserMobileAnswerAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ReportUserMobileAnswer, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ReportUserMobileVideoAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ReportUserMobileVideo, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ReportSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.ReportSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="ReportListGoalResult" class="ReportListGoalAlias">
+      <result property="VideoCount"                         column="int_video_count"               type="Int32"        dbType="integer"/>
+      <result property="WinCount"                           column="int_win_count"                 type="Int32"        dbType="integer"/>
+      <result property="LostCount"                          column="int_lost_count"                type="Int32"        dbType="integer"/>
+      <result property="PrizeCount"                         column="dec_prize_count"               type="Decimal"      dbType="decimal"/>
+    </resultMap>
+
+    <resultMap id="ReportListUserMobileResult" class="ReportListUserMobileAlias">
+      <result property="UserMobileId"                       column="id_usermobile"                 type="Int32"        dbType="integer"/>
+      <result property="UserMobileName"                     column="str_usermobile_name"           type="String"       dbType="varchar"/>
+      <result property="UserMobileEmail"                    column="str_usermobile_email"          type="String"       dbType="varchar"/>
+      <result property="DtAnswer"                           column="dt_view"                       type="DateTime"     dbType="datetime"/>
+      <result property="VideoMinToWinPercentage"            column="int_video_min_correct_answer"  type="Int32"        dbType="integer"/>
+      <result property="VideoMinToWinAnswerPercentage"      column="int_answer_percentage"         type="Int32"        dbType="integer"/>
+      <result property="AnswerCorrectCount"                 column="int_answer_correct_count"      type="Int32"        dbType="integer"/>
+      <result property="AnswerWrongCount"                   column="int_answer_wrong_count"        type="Int32"        dbType="integer"/>
+      <result property="VideoTitle"                         column="str_video_title"               type="String"       dbType="varchar"/>
+      <result property="VideoId"                            column="id_video"                      type="Int32"        dbType="integer"/>
+    </resultMap>
+
+    <resultMap id="ReportUserMobileAnswerResult" class="ReportUserMobileAnswerAlias">
+      <result property="UserMobileName"                     column="str_usermobile_name"            type="String"        dbType="varchar"/>
+      <result property="UserMobileEmail"                    column="str_usermobile_email"           type="String"        dbType="varchar"/>
+      <result property="UserMobileParticipantId"            column="str_usermobile_participant_id"  type="String"        dbType="varchar"/>
+      <result property="ProductName"                        column="str_product_name"               type="String"        dbType="varchar"/>
+      <result property="VideoTitle"                         column="str_video_title"                 type="String"        dbType="varchar"/>
+      <result property="QuizTitle"                          column="str_quiz_title"                 type="String"        dbType="varchar"/>
+      <result property="UserMobileAnswer"                   column="str_usermobile_answer"          type="String"        dbType="varchar"/>
+      <result property="IsAnswerCorrect"                    column="ind_answer_correct"             type="Boolean"       dbType="bit"/>
+      <result property="DtAnswer"                           column="dt_answer"                      type="DateTime"      dbType="datetime"/>
+    </resultMap>
+
+    <resultMap id="ReportUserMobileVideoResult" class="ReportUserMobileVideoAlias">
+      <result property="UserMobileName"                     column="str_usermobile_name"            type="String"        dbType="varchar"/>
+      <result property="UserMobileEmail"                    column="str_usermobile_email"           type="String"        dbType="varchar"/>
+      <result property="UserMobileParticipantId"            column="str_usermobile_participant_id"  type="String"        dbType="varchar"/>
+      <result property="DtView"                             column="dt_usermobile_video_view"       type="DateTime"      dbType="datetime"/>
+      <result property="VideoTitle"                         column="str_video_title"                type="String"        dbType="varchar"/>
+      <result property="VideoId"                            column="id_video"                       type="Int32"         dbType="integer"/>
+      <result property="UserMobileVideoAnswerCorrectCount"  column="int_usermobile_answer_correct"  type="Int32"         dbType="integer"/>
+      <result property="UserMobileVideoAnswerWrongCount"    column="int_usermobile_answer_wrong"    type="Int32"         dbType="integer"/>
+      <result property="UserMobileVideoPrize"               column="dec_usermobile_video_prize"     type="Decimal"       dbType="decimal"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="ReportListGoal" resultMap="ReportListGoalResult" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+        with tb_report_indicator as 
+        (
+	          select tb_report_video.id_product, tb_report_video.id_video, tb_report_video.str_video_title, case when tb_report_video.int_answer_percentage >= tb_report_video.int_video_min_correct_answer then 1 else 0 end as ind_win_prize, tb_report_video.int_video_min_correct_answer, tb_report_video.int_answer_percentage, tb_report_video.dec_prize
+	          from
+	          (
+		            select v.id_product id_product, v.id as id_video, v.str_title as str_video_title, v.int_min_correct_answer int_video_min_correct_answer, case when prize.int_answered_questions_count > 0 then convert(integer, 100 * (prize.int_correct_answered_questions_count / convert(decimal(16,2),prize.int_answered_questions_count))) else 0 end as int_answer_percentage, prize.dec_prize
+		            from tb_product_quiz_usermobile_prize prize inner join tb_product_video v on v.id = prize.id_product_video
+                                                            inner join tb_product p on p.id = v.id_product
+                                                            left join tb_product_permission pp on pp.id_product = p.id
+		            where ind_view is not null
+                ]]>
+      <dynamic>
+        <isNotNull property="MenuCategoryId" prepend="AND">
+          <![CDATA[ 
+                p.id_menu_category = #MenuCategoryId#
+              ]]>
+        </isNotNull>
+        <isNotNull property="PermissionId" prepend="AND">
+          <![CDATA[ 
+                pp.str_channel_id = #PermissionId#
+            ]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[ 
+                convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+            ]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[ 
+                convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+            ]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+	          ) as tb_report_video
+        )
+        select * 
+        from 
+        (
+          select row_number() over ( order by RowConstrainedResult.int_video_count ) as RowNum, *
+          from 
+          (
+              select 
+                (select count(*) from (select id_video from tb_report_indicator group by id_video) tb_total_video) int_video_count, 
+                (select count(*) from tb_report_indicator where tb_report_indicator.ind_win_prize = 1) int_win_count, 
+                (select count(*) from tb_report_indicator where tb_report_indicator.ind_win_prize = 0) int_lost_count, 
+                (select sum(tb_report_indicator.dec_prize) from tb_report_indicator) dec_prize_count
+          ) AS RowConstrainedResult
+        ) as tb_final
+        where tb_final.RowNum > #PageStart# AND tb_final.RowNum <= #PageEnd#
+        order by tb_final.RowNum
+        ]]>
+    </select>
+
+    <select id="CountReportListGoal" resultClass="Int32" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+        with tb_report_indicator as 
+        (
+	          select tb_report_video.id_product, tb_report_video.id_video, tb_report_video.str_video_title, case when tb_report_video.int_answer_percentage >= tb_report_video.int_video_min_correct_answer then 1 else 0 end as ind_win_prize, tb_report_video.int_video_min_correct_answer, tb_report_video.int_answer_percentage, tb_report_video.dec_prize
+	          from
+	          (
+		            select v.id_product id_product, v.id as id_video, v.str_title as str_video_title, v.int_min_correct_answer int_video_min_correct_answer, case when prize.int_answered_questions_count > 0 then convert(integer, 100 * (prize.int_correct_answered_questions_count / convert(decimal(16,2),prize.int_answered_questions_count))) else 0 end as int_answer_percentage, prize.dec_prize
+		            from tb_product_quiz_usermobile_prize prize inner join tb_product_video v on v.id = prize.id_product_video
+                                                            inner join tb_product p on p.id = v.id_product
+                                                            left join tb_product_permission pp on pp.id_product = p.id
+		            where ind_view is not null
+                ]]>
+      <dynamic>
+        <isNotNull property="MenuCategoryId" prepend="AND">
+          <![CDATA[ 
+                p.id_menu_category = #MenuCategoryId#
+              ]]>
+        </isNotNull>
+        <isNotNull property="PermissionId" prepend="AND">
+          <![CDATA[ 
+                pp.str_channel_id = #PermissionId#
+            ]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[ 
+                convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+            ]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[ 
+                convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+            ]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+	          ) as tb_report_video
+        )
+        
+        select count(*)
+        from 
+        (
+            select 
+              (select count(*) from (select id_video from tb_report_indicator group by id_video) tb_total_video) int_video_count, 
+              (select count(*) from tb_report_indicator where tb_report_indicator.ind_win_prize = 1) int_win_count, 
+              (select count(*) from tb_report_indicator where tb_report_indicator.ind_win_prize = 0) int_lost_count, 
+              (select sum(tb_report_indicator.dec_prize) from tb_report_indicator) dec_prize_count
+        ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <select id="ReportListUserMobile" resultMap="ReportListUserMobileResult" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+      select *
+      from
+      (
+	        select row_number() over ( order by tb_report_video.dt_view desc) as RowNum, tb_report_video.id_usermobile, tb_report_video.str_usermobile_name str_usermobile_name, tb_report_video.str_usermobile_name str_usermobile_email, tb_report_video.id_product, tb_report_video.id_video id_video, tb_report_video.str_video_title str_video_title, tb_report_video.dt_view dt_view, tb_report_video.int_correct_answer int_answer_correct_count, tb_report_video.int_wrong_answer int_answer_wrong_count, tb_report_video.int_video_min_correct_answer, tb_report_video.int_answer_percentage
+	        from
+	        (
+		        select distinct um.id id_usermobile, um.str_name str_usermobile_name, um.str_email str_usermobile_email, um.str_participant_id str_usermobile_participant_id, v.id_product id_product, v.id as id_video, v.str_title as str_video_title, v.int_min_correct_answer int_video_min_correct_answer, case when prize.int_answered_questions_count > 0 then convert(integer, 100 * (prize.int_correct_answered_questions_count / convert(decimal(16,2),prize.int_answered_questions_count))) else 0 end as int_answer_percentage, prize.dec_prize, prize.dt_view, prize.int_correct_answered_questions_count as int_correct_answer, (prize.int_answered_questions_count - prize.int_correct_answered_questions_count)  as int_wrong_answer
+		        from tb_product_quiz_usermobile_prize prize inner join tb_product_video v on v.id = prize.id_product_video
+													                              inner join tb_user_mobile um on um.id = prize.id_usermobile
+													                              inner join tb_product p on p.id = v.id_product
+                                                        left join tb_product_permission pp on pp.id_product = p.id
+		        where ind_view is not null
+            ]]>
+            <dynamic>
+              <isNotNull property="MenuCategoryId" prepend="AND">
+                <![CDATA[ 
+                      p.id_menu_category = #MenuCategoryId#
+                    ]]>
+              </isNotNull>
+              <isNotNull property="PermissionId" prepend="AND">
+                <![CDATA[ 
+                      pp.str_channel_id = #PermissionId#
+                  ]]>
+              </isNotNull>
+              <isNotNull property="DtBegin" prepend="AND">
+                <![CDATA[ 
+                      convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+                  ]]>
+              </isNotNull>
+              <isNotNull property="DtEnd" prepend="AND">
+                <![CDATA[ 
+                      convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+                  ]]>
+              </isNotNull>
+            </dynamic>
+          <![CDATA[
+	        ) as tb_report_video
+      ) AS RowConstrainedResult
+      where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+      order by RowConstrainedResult.RowNum 
+      ]]>
+    </select>
+
+    <select id="CountReportListUserMobile" resultClass="Int32" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+	        select count(*)
+	        from
+	        (
+		        select distinct um.str_name str_usermobile_name, um.str_email str_usermobile_email, um.str_participant_id str_usermobile_participant_id, v.id_product id_product, v.id as id_video, v.str_title as str_video_title, v.int_min_correct_answer int_video_min_correct_answer, case when prize.int_answered_questions_count > 0 then convert(integer, 100 * (prize.int_correct_answered_questions_count / convert(decimal(16,2),prize.int_answered_questions_count))) else 0 end as int_answer_percentage, prize.dec_prize, prize.dt_view, prize.int_correct_answered_questions_count as int_correct_answer, (prize.int_answered_questions_count - prize.int_correct_answered_questions_count)  as int_wrong_answer
+		        from tb_product_quiz_usermobile_prize prize inner join tb_product_video v on v.id = prize.id_product_video
+													                              inner join tb_user_mobile um on um.id = prize.id_usermobile
+													                              inner join tb_product p on p.id = v.id_product
+                                                        left join tb_product_permission pp on pp.id_product = p.id
+		        where ind_view is not null
+            ]]>
+      <dynamic>
+        <isNotNull property="MenuCategoryId" prepend="AND">
+          <![CDATA[ 
+                      p.id_menu_category = #MenuCategoryId#
+                    ]]>
+        </isNotNull>
+        <isNotNull property="PermissionId" prepend="AND">
+          <![CDATA[ 
+                      pp.str_channel_id = #PermissionId#
+                  ]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[ 
+                      convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+                  ]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[ 
+                      convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+                  ]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+	        ) as tb_report_video
+      ]]>
+    </select>
+
+    <select id="SelectReportUserMobileAnswer" resultMap="ReportUserMobileAnswerResult" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+        
+        select str_usermobile_name, str_usermobile_email, str_usermobile_participant_id, str_product_name, str_video_title, str_quiz_title, str_usermobile_answer, ind_answer_correct, dt_answer
+        from 
+        ( 
+        
+          select row_number() over ( order by a.dt_insert desc) as RowNum, um.str_name str_usermobile_name, um.str_email str_usermobile_email, um.str_participant_id str_usermobile_participant_id, p.str_name str_product_name, v.str_title str_video_title, a.str_product_quiz str_quiz_title, a.str_product_quiz_item str_usermobile_answer, a.ind_answer_correct ind_answer_correct, a.dt_insert dt_answer
+          from tb_product_quiz_usermobile_answer a inner join tb_user_mobile um on um.id = a.id_usermobile
+										                               inner join tb_product_video v on v.id = a.id_product_video
+										                               inner join tb_product p on p.id = v.id_product
+          where 1 = 1
+          ]]>
+      <dynamic>
+        <isNotNull property="UserMobileId" prepend="AND">
+          <![CDATA[um.id = #UserMobileId#]]>
+        </isNotNull>
+        <isNotNull property="UserMobileName" prepend="AND">
+          <![CDATA[um.str_name LIKE '%$UserMobileName$%']]>
+        </isNotNull>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[p.id = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="VideoId" prepend="AND">
+          <![CDATA[v.id = #VideoId#]]>
+        </isNotNull>
+        <isNotNull property="QuizId" prepend="AND">
+          <![CDATA[a.id_product_quiz = #QuizId#]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+      ) AS RowConstrainedResult
+      where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+      order by RowConstrainedResult.RowNum 
+      ]]>
+    </select>
+
+    <select id="CountReportUserMobileAnswer" resultClass="Int32" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+        
+        select count(*)
+        from 
+        ( 
+        
+          select row_number() over ( order by a.dt_insert desc) as RowNum, um.str_name str_usermobile_name, um.str_email str_usermobile_email, um.str_participant_id str_usermobile_participant_id, p.str_name str_product_name, v.str_title str_video_title, a.str_product_quiz str_quiz_title, a.str_product_quiz_item str_usermobile_answer, a.ind_answer_correct ind_answer_correct, a.dt_insert dt_answer
+          from tb_product_quiz_usermobile_answer a inner join tb_user_mobile um on um.id = a.id_usermobile
+										                               inner join tb_product_video v on v.id = a.id_product_video
+										                               inner join tb_product p on p.id = v.id_product
+          where 1 = 1
+          ]]>
+      <dynamic>
+        <isNotNull property="UserMobileId" prepend="AND">
+          <![CDATA[um.id = #UserMobileId#]]>
+        </isNotNull>
+        <isNotNull property="UserMobileName" prepend="AND">
+          <![CDATA[um.str_name LIKE '%$UserMobileName$%']]>
+        </isNotNull>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[p.id = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="VideoId" prepend="AND">
+          <![CDATA[v.id = #VideoId#]]>
+        </isNotNull>
+        <isNotNull property="QuizId" prepend="AND">
+          <![CDATA[a.id_product_quiz = #QuizId#]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+      ) AS RowConstrainedResult
+      ]]>
+    </select>
+
+    <select id="SelectReportUserMobileVideo" resultMap="ReportUserMobileVideoResult" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+        select str_usermobile_name, str_usermobile_email, str_usermobile_participant_id, str_product_name, str_quiz_title, str_usermobile_answer, ind_answer_correct, dt_answer
+        from 
+        ( 
+            select row_number() over ( order by p.dt_view desc) as RowNum, um.str_name str_usermobile_name, um.str_email str_usermobile_email, um.str_participant_id str_usermobile_participant_id, p.dt_view dt_usermobile_video_view, prod.str_name str_product_name , v.str_title str_video_title, v.id id_video, p.int_correct_answered_questions_count int_usermobile_answer_correct, p.int_answered_questions_count - p.int_correct_answered_questions_count as int_usermobile_answer_wrong, p.dec_prize dec_usermobile_video_prize
+            from tb_product_quiz_usermobile_prize p inner join tb_user_mobile um on um.id = p.id_usermobile 
+										                                inner join tb_product_video v on v.id = p.id_product_video
+										                                inner join tb_product prod on prod.id = v.id_product
+            where p.dt_view is not null
+          ]]>
+      <dynamic>
+        <isNotNull property="UserMobileName" prepend="AND">
+          <![CDATA[um.str_name LIKE '%$UserMobileName$%']]>
+        </isNotNull>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[prod.id = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="VideoId" prepend="AND">
+          <![CDATA[v.id = #VideoId#]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+        ) AS RowConstrainedResult
+        where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+        order by RowConstrainedResult.RowNum 
+        ]]>
+    </select>
+
+    <select id="CountReportUserMobileVideo" resultClass="Int32" parameterClass="ReportSearchParameterAlias">
+      <![CDATA[
+        select count(*)
+        from 
+        ( 
+            select row_number() over ( order by p.dt_view desc) as RowNum, um.str_name str_usermobile_name, um.str_email str_usermobile_email, um.str_participant_id str_usermobile_participant_id, p.dt_view dt_usermobile_video_view, prod.str_name str_product_name , v.str_title str_video_title, v.id id_video, p.int_correct_answered_questions_count int_usermobile_answer_correct, p.int_answered_questions_count - p.int_correct_answered_questions_count as int_usermobile_answer_wrong, p.dec_prize dec_usermobile_video_prize
+            from tb_product_quiz_usermobile_prize p inner join tb_user_mobile um on um.id = p.id_usermobile 
+										                                inner join tb_product_video v on v.id = p.id_product_video
+										                                inner join tb_product prod on prod.id = v.id_product
+            where p.dt_view is not null
+          ]]>
+      <dynamic>
+        <isNotNull property="UserMobileName" prepend="AND">
+          <![CDATA[um.str_name LIKE '%$UserMobileName$%']]>
+        </isNotNull>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[prod.id = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="VideoId" prepend="AND">
+          <![CDATA[v.id = #VideoId#]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+        ) AS RowConstrainedResult
+        ]]>
+    </select>
+    
+  </statements>
+</sqlMap>

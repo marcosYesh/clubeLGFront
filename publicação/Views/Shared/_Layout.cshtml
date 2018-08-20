@@ -1,0 +1,100 @@
+﻿@using MBLabs.LGClubeWebBackendLib.Transfer;
+@using MBLabs.LGClubeWebBackendLib.Enumerator;
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,800,800italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald:400,300,700">
+    <meta name="viewport" content="width=device-width" />
+
+    @Styles.Render("~/bundles/style/mvpready")
+    @Styles.Render("~/bundles/style/orgchart")
+
+    <link href="~/Content/ColorBox/colorbox.css" rel="stylesheet" />
+    <link href="~/Content/themes/mvpready/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/themes/mvpready/magnific-popup.css" rel="stylesheet">
+
+    @RenderSection("styles", required: false)
+    @Scripts.Render("~/bundles/modernizr")
+
+    <noscript>
+        <link rel="stylesheet" type="text/css" href="~/Content/FileUpload/css/jquery.fileupload-ui-noscript.css" />
+    </noscript>
+    <!--[if lt IE 9]><script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+<body>
+    <div id="wrapper">
+        <header class="navbar navbar-inverse" role="banner">
+            <div class="container">
+                <div class="navbar-header">
+                    <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Alterar</span>
+                        <i class="fa fa-cog"></i>
+                    </button>
+
+                    <a href="/" class="navbar-brand navbar-brand-img"><img src="~/Images/img-logo.png" style="height: 40px; margin-top: 5px;" /></a>
+                </div>
+
+                @if (TempData["DisableMenu"] == null)
+                {
+                    <nav class="collapse navbar-collapse" role="navigation">
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <span style="float: left; margin-top: 21px; margin-right: 5px; color: #FFF;">@Session["Welcome"]</span>
+                            <li class="dropdown navbar-profile">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                                    <span class="navbar-profile-label">@Session["LoggedUserAlias"] &nbsp;</span>
+                                    <i class="fa fa-caret-down"></i>
+                                </a>
+
+                                <ul class="dropdown-menu" role="menu">
+                                    <li class="dialogChangeStore"><a href="#"><i class="fa fa-cogs"></i>&nbsp;&nbsp;Alterar Loja</a></li>
+                                    <li><a href="/sair"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;Sair</a></li>
+                                </ul>
+
+                            </li>
+                        </ul>
+                    </nav>
+                }
+            </div>
+        </header>
+
+        <!-- Render Menu -->
+        @{Html.RenderPartial("_Menu");}
+
+        <!-- Render Page Content -->
+        <div id="body" class="container">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <small class="pull-left">Copyright © @DateTime.Now.Year - <a href="http://www.lg.com.br" target="_blank" style="font-weight: bold;">YESHCAMP</a></small>
+            <small class="devby pull-right" style="display: none;">Desenvolvido por <a href="http://www.mblabs.com.br/" target="_blank">MB Labs</a></small>
+        </div>
+    </footer>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/script/mvpready")
+    @Scripts.Render("~/bundles/script/blockUi")
+    @Scripts.Render("~/bundles/script/notify")
+    @Scripts.Render("~/bundles/script/webcam")
+    @RenderSection("scripts", required: false)
+
+    @{Html.RenderPartial("_Loader");}
+    @{Html.RenderPartial("_DeleteModal");}
+    @{Html.RenderPartial("_GenericModal");}
+    @{Html.RenderPartial("_WebMessage");}
+    <style>
+        .datepicker {
+            z-index: 100000000000000 !important;
+        }
+    </style>
+</body>
+</html>

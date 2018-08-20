@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="IntegrationHistory" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="IntegrationHistoryAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.IntegrationHistory, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="IntegrationHistoryResult" class="IntegrationHistoryAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      
+      <result property="URL"                                column="str_url"                        type="String"        dbType="varchar"/>
+      <result property="ContentType"                        column="str_content_type"               type="String"        dbType="varchar"/>
+      <result property="MethodType"                         column="str_method_type"                type="String"        dbType="varchar"/>
+      <result property="Parameters"                         column="str_parameters"                 type="String"        dbType="varchar"/>
+      <result property="Response"                           column="str_response"                   type="String"        dbType="varchar"/>
+      <result property="Observation"                        column="str_observation"                type="String"        dbType="varchar"/>
+      
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <statement id="Insert" parameterClass="IntegrationHistoryAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_integration_history (str_url, str_content_type, str_method_type, str_parameters, str_response, str_observation, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#URL#, #ContentType#, #MethodType#, #Parameters#, #Response#, #Observation#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+  </statements>
+</sqlMap>

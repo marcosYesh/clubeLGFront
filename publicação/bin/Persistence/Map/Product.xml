@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="Product" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.Product, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ProductSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.ProductSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="ProductResult" class="ProductAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="FatherMenuCategoryId"               column="id_menu_category"               type="Int32"         dbType="integer"/>
+      <result property="Name"                               column="str_name"                       type="String"        dbType="varchar"/>
+      <result property="Description"                        column="str_description"                type="String"        dbType="varchar"/>
+      <result property="FullDescription"                    column="str_full_description"           type="String"        dbType="varchar"/>
+      <result property="PhotoPath"                          column="str_photopath"                  type="String"        dbType="varchar"/>
+      <result property="IsFeatured"                         column="ind_promotion"                  type="Boolean"        dbType="bit"/>
+      <result property="IsLaunch"                           column="ind_launch"                     type="Boolean"        dbType="bit"/>
+      <result property="PDFPath"                            column="str_pdf_path"                   type="String"        dbType="varchar"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductResult">
+      <![CDATA[
+        select id, id_menu_category, str_name, str_description, str_full_description, str_photopath, ind_promotion, ind_launch, id_insert_by, id_update_by, dt_insert, dt_update, ind_active, str_pdf_path
+        from tb_product
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByFatherMenuCategoryId" resultMap="ProductResult" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        select p.id, p.id_menu_category, p.str_name, p.str_description, p.str_full_description, p.str_photopath, p.ind_promotion, p.ind_launch, p.id_insert_by, p.id_update_by, p.dt_insert, p.dt_update, p.ind_active, p.str_pdf_path
+        from tb_product p inner join tb_product_permission pp on pp.id_product = p.id
+                          inner join tb_permission per on per.id = pp.str_channel_id
+        where p.id_menu_category = #fatherMenuCategoryId# and per.str_channel_id = #channelId# and p.ind_active = 1 and pp.ind_active = 1 and per.ind_active = 1 
+      ]]>
+    </select>
+
+    <select id="SelectByFeaturedList" resultMap="ProductResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where ind_active = 1 and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="ProductSearchParameterAlias" resultMap="ProductResult">
+      <![CDATA[
+            select id, id_menu_category, str_name, str_description, str_full_description, str_photopath, ind_promotion, ind_launch, id_insert_by, id_update_by, dt_insert, dt_update, ind_active, str_pdf_path
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_product
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="ProductSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_product
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product (id_menu_category, str_name, str_description, str_full_description, str_photopath, ind_promotion, ind_launch, id_insert_by, id_update_by, dt_insert, dt_update, ind_active, str_pdf_path)
+        values (#FatherMenuCategoryId#, #Name#, #Description#, #FullDescription#, #PhotoPath#, #IsFeatured#, #IsLaunch#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#, #PDFPath#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="ProductAlias">
+      <![CDATA[
+        update 
+          tb_product 
+        set 
+          id_menu_category = #FatherMenuCategoryId#,
+          str_name = #Name#,
+          str_description = #Description#,
+          str_full_description = #FullDescription#,
+          str_photopath = #PhotoPath#,
+          ind_promotion = #IsFeatured#,
+          ind_launch = #IsLaunch#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#, 
+          str_pdf_path = #PDFPath#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

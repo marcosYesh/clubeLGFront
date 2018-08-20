@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="ProductQuiz" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductQuizAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ProductQuiz, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ProductQuizSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.ProductQuizSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="ProductQuizResult" class="ProductQuizAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="ProductId"                          column="id_product"                     type="Int32"         dbType="integer"/>
+      <result property="Title"                              column="str_title"                      type="String"        dbType="varchar"/>
+      <result property="Content"                            column="str_content"                    type="String"        dbType="varchar"/>
+      <result property="VideoPath"                          column="str_video_path"                 type="String"        dbType="varchar"/>
+      <result property="Prize"                              column="dec_prize"                      type="Decimal"       dbType="decimal"/>
+      <result property="Order"                              column="int_order"                      type="Int32"       dbType="integer"/>
+      <result property="AudioType"                          column="int_video_type"                 type="MBLabs.LGClubeWebBackendLib.Enumerator.AudioType"              dbType="integer"/>
+      <result property="MinCorrectAnswer"                   column="int_min_correct_answer"         type="Int32"         dbType="integer"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductQuizResult">
+      <![CDATA[
+        select id, id_product, str_title, str_content, dec_prize, int_order, int_video_type, str_video_path, int_min_correct_answer, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_product_quiz
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductQuizResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByProductId" resultMap="ProductQuizResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="ProductQuizSearchParameterAlias" resultMap="ProductQuizResult">
+      <![CDATA[
+            select id, id_product, str_title, str_content, dec_prize, int_order, int_video_type, str_video_path, int_min_correct_answer, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_product_quiz
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[id_product = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="ProductQuizSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_product_quiz
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[id_product = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductQuizAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product_quiz (id_product, str_title, str_content, dec_prize, int_order, int_video_type, int_min_correct_answer, str_video_path, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#ProductId#, #Title#, #Content#, #Prize#, #Order#, #AudioType#, #MinCorrectAnswer#, #VideoPath#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="ProductQuizAlias">
+      <![CDATA[
+        update 
+          tb_product_quiz 
+        set 
+          id_product = #ProductId#,
+          str_title = #Title#,
+          str_content = #Content#,
+          dec_prize = #Prize#,
+          int_video_type = #AudioType#,
+          int_min_correct_answer = #MinCorrectAnswer#,
+          int_order = #Order#,
+          str_video_path = #VideoPath#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_quiz
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

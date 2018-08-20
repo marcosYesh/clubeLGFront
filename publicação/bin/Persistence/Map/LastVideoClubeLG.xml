@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="LastVideoClubeLG" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="LastVideoClubeLGAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.LastVideoClubeLG, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="LastVideoClubeLGResult" class="LastVideoClubeLGAlias">
+      <result property="VideoTitle"                               column="str_video_title"                        type="String"        dbType="varchar"/>
+      <result property="VideoContent"                             column="str_video_content"                      type="String"        dbType="varchar"/>
+      <result property="ProductPhotoPath"                         column="str_product_photopath"                  type="String"        dbType="varchar"/>
+      <result property="ProductId"                                column="id_product"                             type="Int32"         dbType="integer"/>
+      <result property="UserMobileSessionId"                      column="str_session_id"                         type="String"        dbType="varchar"/>
+      <result property="VideoPrize"                               column="dec_video_prize"                        type="Decimal"       dbType="decimal"/>
+      <result property="VideoId"                                  column="id_video"                               type="Int32"         dbType="integer"/>
+      <result property="VideoUrl"                                 column="str_video_url"                          type="String"        dbType="varchar"/>
+      <result property="UserMobileVideoPrize"                     column="dec_usermobile_video_prize"             type="Decimal"       dbType="decimal"/>
+      <result property="UserMobileDtVideoView"                    column="dt_video_view"                          type="DateTime"      dbType="datetime"/>
+      <result property="UserMobileVideoRating"                    column="int_video_rating"                       type="Int32"         dbType="integer"/>
+      <result property="UserMobileVideoAnsweredCount"             column="int_video_answered_questions_count"     type="Int32"         dbType="integer"/>
+      <result property="UserMobileVideoAnsweredCorrectCount"      column="int_video_correct_answered_questions_count"  type="Int32"    dbType="integer"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAllVideo" resultMap="LastVideoClubeLGResult" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        select distinct
+        pv.str_title str_video_title, 
+        pv.str_content str_video_content, 
+        p.str_photopath str_product_photopath, 
+        p.id id_product, 
+        um.str_session_id str_session_id, 
+        pv.dec_prize dec_video_prize, 
+        pv.id id_video,
+        pv.str_video_path as str_video_url, 
+        prize.dec_prize dec_usermobile_video_prize, 
+        prize.dt_view dt_video_view, 
+        prize.int_rating int_video_rating, 
+        prize.int_answered_questions_count int_video_answered_questions_count, 
+        prize.int_correct_answered_questions_count int_video_correct_answered_questions_count
+        from tb_product_video pv inner join tb_product_permission per on per.id_product = pv.id_product
+						                     inner join tb_product p on p.id = pv.id_product
+						                     inner join tb_permission perm on perm.id = per.str_channel_id
+						                     inner join tb_user_mobile um on um.id = #userMobileId#
+						                     left join tb_product_quiz_usermobile_prize prize on (prize.id_product_video = pv.id and prize.id_usermobile = #userMobileId#)
+        where perm.str_channel_id = #channelId# and perm.ind_active = 1 and per.ind_active = 1 and pv.ind_active = 1
+        order by prize.dt_view
+      ]]>
+    </select>
+
+  </statements>
+</sqlMap>

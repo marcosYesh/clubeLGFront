@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="ProductVideoQuestion" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductVideoQuestionAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ProductVideoQuestion, MBLabs.LGClubeWebBackendLib" />
+    <!--<typeAlias alias="ProductVideoQuestionXSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.ProductVideoQuestionSearchParameter, MBLabs.LGClubeWebBackendLib" />-->
+    <typeAlias alias="ProductVideoQuestionSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.ProductVideoQuestionCategorySearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="ProductVideoQuestionResult" class="ProductVideoQuestionAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="ProductVideoId"                     column="id_product_video"               type="Int32"         dbType="integer"/>
+      <result property="Showtime"                           column="str_showtime"                   type="String"        dbType="varchar"/>
+      <result property="Question"                           column="str_question"                   type="String"        dbType="varchar"/>
+      <result property="AnswerType"                         column="int_answer_type"                type="MBLabs.LGClubeWebBackendLib.Enumerator.AnswerType"              dbType="integer"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductVideoQuestionResult">
+      <![CDATA[
+        select id, id_product_video, str_showtime, str_question, int_answer_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_product_video_question
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductVideoQuestionResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByProductVideoId" resultMap="ProductVideoQuestionResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product_video = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="ProductVideoQuestionSearchParameterAlias" resultMap="ProductVideoQuestionResult">
+      <![CDATA[
+            select id, id_product_video, str_showtime, str_question, int_answer_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_product_video_question
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="ProductVideoId" prepend="AND">
+          <![CDATA[id_product_video = #ProductVideoId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="ProductVideoQuestionSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_product_video_question
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="ProductVideoId" prepend="AND">
+          <![CDATA[id_product_video = #ProductVideoId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductVideoQuestionAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product_video_question (id_product_video, str_showtime, str_question, int_answer_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#ProductVideoId#, #Showtime#, #Question#, #AnswerType#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="ProductVideoQuestionAlias">
+      <![CDATA[
+        update 
+          tb_product_video_question 
+        set 
+          id_product_video = #ProductVideoId#,
+          str_showtime = #Showtime#,
+          str_question = #Question#,
+          int_answer_type = #AnswerType#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_video_question
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>
