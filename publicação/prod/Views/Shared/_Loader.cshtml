@@ -1,0 +1,18 @@
+﻿<script>
+    $('.blockButton').click(function () {
+        if ($('#submit').parsley().isValid() == true) {
+            $.blockUI({ message: $('.div-loader'), css: { width: '195px', height: '160px', top: '35%', left: '43%' }, baseZ: 1000000 });
+        }
+    });
+
+    $('.showLoader').click(function () {
+        $.blockUI({ message: $('.div-loader'), css: { width: '195px', height: '160px', top: '35%', left: '43%' }, baseZ: 1000000 });
+    });
+</script>
+
+<div class="div-loader " style="display: none;">
+    <br />
+    <h2>Carregando</h2>
+    <img src="~/Content/blockui/loader.gif" />
+    <br />
+</div>

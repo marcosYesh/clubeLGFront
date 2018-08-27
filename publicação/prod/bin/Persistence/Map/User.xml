@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="User" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="UserAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.User, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="UserSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.UserSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="UserResult" class="UserAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="Name"                               column="str_name"                       type="String"        dbType="varchar"/>
+      <result property="Email"                              column="str_email"                      type="String"        dbType="varchar"/>
+      <result property="Password"                           column="str_password"                   type="String"        dbType="varchar"/>
+      <result property="ProfileType"                        column="int_profile_type"               type="MBLabs.LGClubeWebBackendLib.Enumerator.ProfileType"  dbType="integer"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="UserResult">
+      <![CDATA[
+        select id, str_name, str_email, str_password, int_profile_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_user
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="UserResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByEmail" resultMap="UserResult" extends="SelectAll" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        where str_email = #email# and ind_active = 1
+      ]]>
+      <dynamic>
+        <isNotNull property="storeId" prepend="AND">
+          id_store = #storeId#
+        </isNotNull>
+      </dynamic>
+      
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="UserSearchParameterAlias" resultMap="UserResult">
+      <![CDATA[
+            select  *
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_user
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+        <isNotNull property="ProfileType" prepend="AND">
+          int_profile_type = #ProfileType#
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="UserSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_user
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+        <isNotNull property="ProfileType" prepend="AND">
+          int_profile_type = #ProfileType#
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="UserAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_user (str_name, str_email, int_profile_type, str_password, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#Name#, #Email#, #ProfileType#, #Password#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="UserAlias">
+      <![CDATA[
+        update 
+          tb_user 
+        set 
+          str_name = #Name#,
+          str_email = #Email#,
+          int_profile_type = #ProfileType#,
+          str_password = #Password#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_user
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

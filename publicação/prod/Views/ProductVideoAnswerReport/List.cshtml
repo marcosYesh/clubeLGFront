@@ -1,0 +1,57 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.ReportUserMobileAnswerListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Relatório >> Últimas Respostas</u>
+        </h3>
+
+        <div class="portlet-body">
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <form id="index" method="POST" class="form">
+                    <div class="row container">
+                        <a class="btn btn-secondary" href="/ProductVideoAnswerReport/Export">Exportar</a>
+                    </div>
+                </form>
+                <br />
+                <hr />
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+               {
+                   columns.Add(model => model.UserMobileName).Titled("Nome");
+                   columns.Add(model => model.UserMobileEmail).Titled("Email");
+                   columns.Add(model => model.ProductName).Titled("Produto");
+                   columns.Add(model => model.VideoTitle).Titled("Vídeo");
+                   columns.Add(model => model.QuizTitle).Titled("Pergunta");
+                   columns.Add(model => model.UserMobileAnswer).Titled("Resposta");
+                   columns.Add(model => model.IsAnswerCorrect).Titled("Resp. Correta");
+                   columns.Add(model => model.DtAnswer).Titled("D/H Resp.");
+               })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

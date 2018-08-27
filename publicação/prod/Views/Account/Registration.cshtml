@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="account-wrapper">
+    <div class="account-body">
+        <h3>Cadastro de Usuário.</h3>
+        <h5>Registre-se em menos de 30 segundos.</h5>
+
+        <form class="form account-form" method="POST" action="/conta">
+
+            <div class="form-group">
+                <label for="signup-email" class="placeholder-hidden">Endereço de Email</label>
+                <input type="text" class="form-control" id="signup-email" placeholder="Seu Email" tabindex="1">
+            </div>
+
+            <div class="form-group">
+                <label for="signup-fullname" class="placeholder-hidden">Seu nome</label>
+                <input type="text" class="form-control" id="signup-fullname" placeholder="Seu Nome" tabindex="2">
+            </div>
+
+            <div class="form-group">
+                <label for="signup-username" class="placeholder-hidden">Usuário</label>
+                <input type="text" class="form-control" id="signup-username" placeholder="Usuário" tabindex="3">
+            </div>
+
+            <div class="form-group">
+                <label for="login-password" class="placeholder-hidden">Senha</label>
+                <input type="password" class="form-control" id="login-password" placeholder="Senha" tabindex="4">
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-inline">
+                    <input type="checkbox" class="" value="" tabindex="5">
+                    Aceito os <a href="javascript:;" target="_blank">Termos de Serviço</a> &amp; <a href="javascript:;" target="_blank">Políticas de Privacidade</a>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-secondary btn-block btn-lg" tabindex="6">
+                    Cadastrar&nbsp; <i class="fa fa-play-circle"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="account-footer">
+        <p>Já possui uma conta? &nbsp; <a href="/login" class="">Entre com sua conta!</a></p>
+    </div>
+
+</div>

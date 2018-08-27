@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="ProductVideoQuestionItem" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductVideoQuestionItemAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ProductVideoQuestionItem, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+  <resultMaps>
+    <resultMap id="ProductVideoQuestionItemResult" class="ProductVideoQuestionItemAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="ProductVideoQuestionId"             column="id_product_video_question"      type="Int32"         dbType="integer"/>
+      <result property="AnswerOption"                       column="str_answer_option"              type="String"        dbType="varchar"/>
+      <result property="AnswerCorrect"                      column="ind_answer_correct"             type="Boolean"       dbType="bit"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductVideoQuestionItemResult">
+      <![CDATA[
+        select id, id_product_video_question, str_answer_option, ind_answer_correct, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_product_video_question_item
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductVideoQuestionItemResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByGetByProductVideoQuestionId" resultMap="ProductVideoQuestionItemResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product_video_question = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductVideoQuestionItemAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product_video_question_item (id_product_video_question, str_answer_option, ind_answer_correct, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#ProductVideoQuestionId#, #AnswerOption#, #AnswerCorrect#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="ProductVideoQuestionItemAlias">
+      <![CDATA[
+        update 
+          tb_product_video_question_item 
+        set 
+          id_product_video_question = #ProductVideoQuestionId#,
+          str_answer_option = #AnswerOption#,
+          ind_answer_correct = #AnswerCorrect#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_video_question_item
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

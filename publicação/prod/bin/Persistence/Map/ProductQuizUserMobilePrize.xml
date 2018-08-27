@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="ProductQuizUserMobilePrize" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductQuizUserMobilePrizeAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ProductQuizUserMobilePrize, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="ProductQuizUserMobilePrizeResult" class="ProductQuizUserMobilePrizeAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="UserMobileId"                       column="id_usermobile"                  type="Int32"         dbType="integer"/>
+      <result property="ProductVideoId"                     column="id_product_video"               type="Int32"         dbType="integer"/>
+      <result property="Prize"                              column="dec_prize"                      type="Decimal"       dbType="integer"/>
+      <result property="WasView"                            column="ind_view"                       type="Boolean"       dbType="bit"/>
+      <result property="DtWasView"                          column="dt_view"                        type="DateTime"      dbType="datetime"/>
+      <result property="Rating"                             column="int_rating"                     type="Int32"         dbType="integer"/>
+      <result property="DtRating"                           column="dt_rating"                      type="DateTime"      dbType="datetime"/>
+      <result property="AnsweredQuestionsCount"             column="int_answered_questions_count"   type="Int32"         dbType="integer"/>
+      <result property="CorrectAnsweredQuestionCount"       column="int_correct_answered_questions_count"   type="Int32" dbType="integer"/>
+      <result property="DtIntegrated"                       column="dt_integrated"                  type="DateTime"      dbType="datetime"/>
+      <result property="WasIntegrated"                      column="ind_integrated"                 type="Boolean"       dbType="bit"/>
+
+      <result property="HasWon"                             column="ind_has_won"                    type="Boolean"       dbType="bit"/>
+      <result property="HasSecondChance"                    column="ind_has_second_chance"          type="Boolean"       dbType="bit"/>
+      <result property="AttemptCount"                       column="int_attempt_count"              type="Int32"         dbType="integer"/>
+      <result property="WasViewSecond"                      column="ind_was_view_second"            type="Boolean"       dbType="bit"/>
+      <result property="DtWasViewSecond"                    column="dt_was_view_second"             type="DateTime"      dbType="datetime"/>
+
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductQuizUserMobilePrizeResult">
+      <![CDATA[
+        select id, id_usermobile, id_product_video, dec_prize, id_insert_by, id_update_by, dt_insert, dt_update, ind_active, ind_view, dt_view, int_rating, dt_rating, int_answered_questions_count, int_correct_answered_questions_count, dt_integrated, ind_integrated, dt_started_view, ind_goal, ind_has_won, ind_has_second_chance, int_attempt_count, ind_was_view_second, dt_was_view_second
+        from tb_product_quiz_usermobile_prize
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductQuizUserMobilePrizeResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByUserMobileId" resultMap="ProductQuizUserMobilePrizeResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_usermobile = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByVideoId" resultMap="ProductQuizUserMobilePrizeResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product_video = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByUserMobileIdAndVideoId" resultMap="ProductQuizUserMobilePrizeResult" extends="SelectAll" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        where id_usermobile = #userMobileId# and id_product_video = #videoId# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectByUserMobileIdAndProductId" resultMap="ProductQuizUserMobilePrizeResult" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        select p.id, p.id_usermobile, p.id_product_video, p.dec_prize, p.id_insert_by, p.id_update_by, p.dt_insert, p.dt_update, p.ind_active, p.ind_view, p.dt_view, p.int_rating, p.dt_rating, p.int_answered_questions_count, p.int_correct_answered_questions_count, p.dt_integrated, p.ind_integrated,
+        p.ind_has_won, p.ind_has_second_chance, p.int_attempt_count, p.ind_was_view_second, p.dt_was_view_second
+        from tb_product_quiz_usermobile_prize p inner join tb_product_video v on v.id = p.id_product_video
+        where p.id_usermobile = #userMobileId# and v.id_product = #productId#
+      ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductQuizUserMobilePrizeAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product_quiz_usermobile_prize (id_usermobile, id_product_video, dec_prize, id_insert_by, id_update_by, dt_insert, dt_update, ind_active, ind_view, dt_view, int_rating, dt_rating, int_answered_questions_count, int_correct_answered_questions_count, dt_integrated, ind_integrated, ind_has_won, ind_has_second_chance, int_attempt_count, ind_was_view_second, dt_was_view_second)
+        values (#UserMobileId#, #ProductVideoId#, #Prize#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#, #WasView#, #DtWasView#, #Rating#, #DtRating#, #AnsweredQuestionsCount#, #CorrectAnsweredQuestionCount#, #DtIntegrated#, #WasIntegrated#, #HasWon#, #HasSecondChance#, #AttemptCount#, #WasViewSecond#, #DtWasViewSecond#);
+        select scope_identity()
+      ]]>
+      </statement>
+
+    <update id="Update" parameterClass="ProductQuizUserMobilePrizeAlias">
+      <![CDATA[
+        update 
+          tb_product_quiz_usermobile_prize 
+        set 
+          id_usermobile = #UserMobileId#, 
+          id_product_video = #ProductVideoId#,
+          dec_prize = #Prize#, 
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#, 
+          ind_view = #WasView#,
+          dt_view = #DtWasView#, 
+          int_rating = #Rating#, 
+          dt_rating = #DtRating#,
+          int_answered_questions_count = #AnsweredQuestionsCount#, 
+          int_correct_answered_questions_count = #CorrectAnsweredQuestionCount#,
+          dt_integrated = #DtIntegrated#, 
+          ind_integrated = #WasIntegrated#,
+          ind_has_won = #HasWon#, 
+          ind_has_second_chance = #HasSecondChance#, 
+          int_attempt_count = #AttemptCount#, 
+          ind_was_view_second = #WasViewSecond#, 
+          dt_was_view_second = #DtWasViewSecond#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_quiz_usermobile_prize
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

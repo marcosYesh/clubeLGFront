@@ -1,0 +1,32 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "[ MUNDO IRYS ] PÁGINA NÃO ENCONTRADA";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="error-container">
+        <div class="error-code">
+            404
+        </div>
+        <div class="error-details">
+
+            <h4>Ooops, <span class="text-primary">Você esta perdido.</span>.</h4>
+
+            <p>Nós não podemos encontrar a página que você está procurando. Há um erro de digitação na url? Ou experimente a barra de pesquisa abaixo</p>
+
+            <form action="/page-404.html" class="form">
+
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Procurar...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-secondary" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+#file-upload-table
+{
+    border-collapse: collapse;
+    font-size: 10px !important;
+}
+
+tbody.files td.delete
+{
+    white-space: nowrap;
+}
+
+tbody.files td.name
+{
+    min-width: 300px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+tbody.files td.size
+{
+    min-width: 80px;
+    text-align: right;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+tbody.files td.action
+{
+    min-width: 120px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+tbody.files .progress
+{
+    width: 155px;
+}
+
+.files .ui-progressbar-value,
+.fileupload-buttonbar .ui-progressbar-value
+{
+    background: url(FileUpload/img/progressblue.gif);
+}
+
+.fileupload-progress
+{
+    margin-left: 75px;
+}
+
+.progress-extended
+{
+    margin-top: 2px;
+    font-size: 10px;
+    color: #b0b0b0;
+}
+
+#file-upload-table .fade
+{
+    opacity: 1.0;
+}
+
+#fileupload .fileinput-button
+{
+    margin-top: 0;
+}
+
+#file-upload-table .name
+{
+    min-width: 0 !important;
+    max-width: 235px;
+    word-wrap: break-word;
+}
+
+#file-upload-table tr td,
+#fileupload input.toggle
+{
+    vertical-align: middle;
+}
+
+    #file-upload-table tr td input[type="checkbox"]
+    {
+        vertical-align: middle;
+        margin-left: 5px;
+    }

@@ -1,0 +1,18 @@
+﻿@if (ViewBag.WebMessage != null)
+{
+    <ul class="icons-list notifications-list">
+        <li>
+            <i class="icon-li fa fa-check-circle text-success"></i>
+            @ViewBag.WebMessage
+        </li>
+    </ul>
+}
+
+@if (TempData["RedirectReason"] != null)
+{
+    <script>
+        $(document).ready(function () {
+            $.notify("@Html.Raw(@TempData["RedirectReason"])", "@Html.Raw(@TempData["RedirectReasonType"].ToString().ToLower())");
+            });
+    </script>
+}

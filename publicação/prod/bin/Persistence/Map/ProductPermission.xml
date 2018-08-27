@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="ProductPermission" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductPermissionAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ProductPermission, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="ProductPermissionResult" class="ProductPermissionAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="ProductId"                          column="id_product"                     type="Int32"         dbType="integer"/>
+      <result property="ChannelId"                          column="str_channel_id"                 type="String"        dbType="varchar"/>
+      <result property="Description"                        column="str_description"                type="String"        dbType="varchar"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductPermissionResult">
+      <![CDATA[
+        select id, id_product, str_channel_id, str_description, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_product_permission
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductPermissionResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectAllActive" resultMap="ProductPermissionResult" extends="SelectAll">
+      <![CDATA[
+        where ind_active = 1
+      ]]>
+    </select>
+      
+    <select id="SelectByProductId" resultMap="ProductPermissionResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductPermissionAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product_permission (id_product, str_channel_id, str_description, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#ProductId#, #ChannelId#, #Description#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="ProductPermissionAlias">
+      <![CDATA[
+        update 
+          tb_product_permission 
+        set 
+          id_product = #ProductId#,
+          str_channel_id = #ChannelId#,
+          str_description = #Description#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_permission
+        where id = #value#
+      ]]>
+    </delete>
+
+    <delete id="DeleteByProductId" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_permission
+        where id_product = #value#
+      ]]>
+    </delete>
+
+    <delete id="DeleteByPermissionId" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_permission
+        where str_channel_id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

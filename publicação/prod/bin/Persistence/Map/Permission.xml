@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="Permission" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="PermissionAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.Permission, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="PermissionSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.PermissionSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="PermissionResult" class="PermissionAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="ChannelId"                          column="str_channel_id"                 type="String"        dbType="varchar"/>
+      <result property="Description"                        column="str_description"                type="String"        dbType="varchar"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="PermissionResult">
+      <![CDATA[
+        select id, str_channel_id, str_description, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_permission
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="PermissionResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByChannelId" resultMap="PermissionResult" extends="SelectAll">
+      <![CDATA[
+        where str_channel_id = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectAllActive" resultMap="PermissionResult" extends="SelectAll">
+      <![CDATA[
+        where ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="PermissionSearchParameterAlias" resultMap="PermissionResult">
+      <![CDATA[
+            select id, str_channel_id, str_description, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_permission
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="PermissionSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_permission
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="PermissionAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_permission (str_channel_id, str_description, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#ChannelId#, #Description#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="PermissionAlias">
+      <![CDATA[
+        update 
+          tb_permission 
+        set 
+          str_channel_id = #ChannelId#,
+          str_description = #Description#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_permission
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

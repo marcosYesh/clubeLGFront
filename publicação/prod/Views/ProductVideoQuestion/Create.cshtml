@@ -1,0 +1,114 @@
+﻿@model MBLabs.LGClubeWebBackendLib.Transfer.ProductVideoQuestion
+
+@using MBLabs.LGClubeWebBackendLib.Enumerator
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section scripts {
+    <script>
+
+        function changeAnswerType(selectedId) {
+            console.log(selectedId);
+            if(selectedId != '') {
+                if (selectedId == 'OPEN_ANSWER' || selectedId == '1' || selectedId == 'INFO' || selectedId == '4') {
+                    $('.div-multi').css('display', 'none');
+                } else {
+                    $('.div-multi').css('display', 'block');
+                }
+            } else {
+                $('.div-multi').css('display', 'none');
+            }
+        }
+
+        $('.ddl-answertype').change(function () {
+            var selectedId = $('.ddl-answertype option:selected').val();
+            changeAnswerType(selectedId);
+        });
+
+        var selectedId = @Html.Raw(Json.Encode(Model.AnswerType));
+        changeAnswerType(selectedId);
+    </script>
+}
+
+<style>
+    .datepicker {
+        text-indent: 9px;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-push-2 col-sm-8 col-sm-push-2">
+            <div class="portlet">
+                <h2 class="portlet-title">
+                    <u>Cadastro >> Vídeo</u>
+                </h2>
+
+                <div class="portlet-body">
+
+                    <form id="submit" data-validate="parsley" method="POST" class="form parsley-form" enctype="multipart/form-data" autocomplete="off">
+
+                        <fieldset>
+                            <legend><i class="fa fa-male"></i>&nbsp&nbsp INFORMAÇÃO DO VÍDEO</legend>
+
+                            @Html.HiddenFor(m => m.Id)
+                            @Html.HiddenFor(m => m.DtInsert)
+                            @Html.HiddenFor(m => m.DtUpdate)
+                            @Html.HiddenFor(m => m.IsActive)
+                            @Html.HiddenFor(m => m.InsertByUserId)
+                            @Html.HiddenFor(m => m.UpdateByUserId)
+                            @Html.HiddenFor(m => m.ProductVideoId)
+
+                            <div class="form-group">
+                                <label>Tipo de Pergunta</label>
+                                @Html.DropDownListFor(m => m.AnswerType, (SelectList)ViewData["AnswerTypeList"], String.Format("-- {0} --", "Selecionar"), new { @class = "form-control ddl-answertype" })
+                            </div>
+
+                            <div class="form-group">
+                                <label>Pergunta (*)</label>
+                                @Html.TextBoxFor(m => m.Question, new { data_required = "true", @class = "form-control parsley-validated", maxlength = "300" })
+                            </div>
+
+                            <div class="form-group">
+                                <label>Hora de Aparição (MINUTO:SEGUNDO) (*)</label>
+                                @Html.TextBoxFor(m => m.Showtime, new { data_required = "true", @class = "form-control time" })
+                            </div>
+
+                            <hr />
+
+                            <div class="div-multi">
+                                @{
+                                    var i = 0;
+                                    foreach (var item in Model.QuestionItemList)
+                                    {
+                                        @Html.HiddenFor(m => m.QuestionItemList[i].Id)
+                                        <div class="form-group">
+                                            <label class="lbl-name">Texto da Resposta @(i + 1)</label>
+                                            @Html.TextBoxFor(m => m.QuestionItemList[i].AnswerOption, new { @class = "form-control" })
+
+                                            <label class="lbl-name">Resposta Correta?</label>
+                                            @Html.CheckBoxFor(m => m.QuestionItemList[i].AnswerCorrect)
+                                            <br /><br />
+                                        </div>
+                                        i++;
+                                    }
+                                }
+                            </div>
+                        </fieldset>
+                        <br />
+                        <div class="form-group">
+                            <input type="submit" class="btn btn-primary blockButton" value="Salvar" />
+                            <a href="@System.Web.HttpContext.Current.Request.UrlReferrer" type="submit" class="btn btn-default">Voltar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

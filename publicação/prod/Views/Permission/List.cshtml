@@ -1,0 +1,53 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.PermissionListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Buscar >> Canal</u>
+        </h3>
+
+        <div class="portlet-body">
+
+            <form id="index" method="POST" class="form">
+                <div class="row container">
+                    <a class="btn btn-default" href="/permissao">Nova Permissão</a>
+                </div>
+            </form>
+            <br />
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+                        {
+                            columns.Add(model => model.ChannelId).Titled("Canal");
+                            columns.Add(model => model.Description).Titled("Descrição");
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/permissao/@d.Id'"><i class="fa fa-pencil"></i></button>));
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/permissao/@d.Id/remover" class="btn btn-xs btn-secondary confirmDialog"><i class="fa fa-times"></i></a>);
+                        })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

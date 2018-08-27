@@ -1,0 +1,56 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.ProductVideoQuestionListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Vídeo >> Perguntas</u>
+        </h3>
+
+        <div class="portlet-body">
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <form id="index" method="POST" class="form">
+                    <div class="row container">
+                        <a class="btn btn-danger" href="/video/@Model.Product.Id/quiz">Nova Pergunta</a>
+                        <a class="btn btn-default" href="/video/@Model.ProductVideo.Id/relatorio">Relatório de respostas</a>
+                    </div>
+                </form>
+                <br />
+                <hr />
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+                    {
+                    columns.Add(model => model.Question).Titled("Questão");
+                    columns.Add(model => model.Showtime).Titled("Hora de exibição");
+                    columns.Add(model => model.AnswerCount).Titled("Qtd. Respostas");
+                    columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/questao/@d.Id/relatorio'"><i class="fa fa-users"></i></button>));
+                    columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/video/@d.ProductVideoId/quiz/@d.Id'"><i class="fa fa-pencil"></i></button>));
+                    columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/video/@d.ProductVideoId/quiz/@d.Id/remover" class="btn btn-xs btn-secondary confirmDialog"><i class="fa fa-times"></i></a>);
+                    })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

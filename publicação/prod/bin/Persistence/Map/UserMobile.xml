@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="UserMobile" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="UserMobileAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.UserMobile, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="UserMobileSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.UserMobileSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+
+  <resultMaps>
+    <resultMap id="UserMobileResult" class="UserMobileAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="Login"                              column="str_login"                      type="String"        dbType="varchar"/>
+      <result property="Name"                               column="str_name"                       type="String"        dbType="varchar"/>
+      <result property="Email"                              column="str_email"                      type="String"        dbType="varchar"/>
+      <result property="Password"                           column="str_password"                   type="String"        dbType="varchar"/>
+      <result property="Token"                              column="str_token"                      type="String"        dbType="varchar"/>
+      <result property="DtTokenExpiration"                  column="dt_token_expiration"            type="DateTime"      dbType="datetime"/>
+      <result property="TotalPrize"                         column="dec_total_prize"                type="Decimal"       dbType="decimal"/>
+      <result property="ProfileType"                        column="int_profile_type"               type="MBLabs.LGClubeWebBackendLib.Enumerator.ProfileType"      dbType="integer"/>
+      <result property="DtLastAccess"                       column="dt_last_access"                 type="DateTime"      dbType="datetime"/>
+
+      <result property="SessionId"                          column="str_session_id"                 type="String"        dbType="varchar"/>
+      <result property="ChannelId"                          column="str_channel_id"                 type="String"        dbType="varchar"/>
+      <result property="NetworkId"                          column="str_network_id"                 type="String"        dbType="varchar"/>
+      <result property="NetworkName"                        column="str_network_name"               type="String"        dbType="varchar"/>
+
+      <result property="ParticipantId"                      column="str_participant_id"             type="String"        dbType="varchar"/>
+      <result property="PhotoUrl"                           column="str_photourl"                   type="String"        dbType="varchar"/>
+      
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="UserMobileResult">
+      <![CDATA[
+        select id, str_login, str_name, str_email, str_password, str_token, dt_token_expiration, dt_last_access, dec_total_prize, int_profile_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active, str_channel_id, str_network_id, str_network_name, str_session_id, str_participant_id, str_photourl
+        from tb_user_mobile
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="UserMobileResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByToken" resultMap="UserMobileResult" extends="SelectAll" parameterClass="System.Collections.IDictionary">
+      <![CDATA[
+        where str_token = #token# and ind_active = 1
+      ]]>
+    </select>
+
+
+    <select id="SelectByEmail" resultMap="UserMobileResult" extends="SelectAll" parameterClass="String">
+      <![CDATA[
+        where str_email = #value# 
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="UserMobileSearchParameterAlias" resultMap="UserMobileResult">
+      <![CDATA[
+            select  *
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_user_mobile
+                       where
+                          ind_active = #IsActive#
+                          ]]>
+      <dynamic>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="UserMobileSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_user_mobile
+                      where
+                        ind_active = #IsActive#
+                        ]]>
+      <dynamic>
+        <isNotNull property="Name" prepend="AND">
+          <![CDATA[str_name LIKE '%$Name$%']]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="UserMobileAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_user_mobile (str_login, str_name, str_email, str_password, str_token, dt_token_expiration, dt_last_access, dec_total_prize, int_profile_type, id_insert_by, id_update_by, dt_insert, dt_update, ind_active, str_channel_id, str_network_id, str_network_name, str_session_id, str_participant_id, str_photourl)
+        values (#Login#, #Name#, #Email#, #Password#, #Token#, #DtTokenExpiration#, #DtLastAccess#, #TotalPrize#, #ProfileType#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#, #ChannelId#, #NetworkId#, #NetworkName#, #SessionId#, #ParticipantId#, #PhotoUrl#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="UserMobileAlias">
+      <![CDATA[
+        update 
+          tb_user_mobile 
+        set 
+          str_login = #Login#,
+          str_name = #Name#, 
+          str_email = #Email#, 
+          str_password = #Password#,
+          str_token = #Token#, 
+          dt_token_expiration = #DtTokenExpiration#, 
+          dec_total_prize = #TotalPrize#,
+          int_profile_type = #ProfileType#,
+          dt_last_access = #DtLastAccess#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#, 
+          str_channel_id = #ChannelId#, 
+          str_network_id = #NetworkId#, 
+          str_network_name = #NetworkName#,
+          str_session_id = #SessionId#,
+          str_participant_id = #ParticipantId#,
+          str_photourl = #PhotoUrl#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_user_mobile
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

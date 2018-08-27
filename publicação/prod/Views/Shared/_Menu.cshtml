@@ -1,0 +1,48 @@
+﻿@using MBLabs.LGClubeWebBackendLib.Enumerator;
+
+@if (TempData["DisableMenu"] == null)
+{
+    <div class="mainnav">
+        <div class="container">
+            <a class="mainnav-toggle" data-toggle="collapse" data-target=".mainnav-collapse">
+                <span class="sr-only"></span>
+                <i class="fa fa-bars"></i>
+            </a>
+
+            <nav class="collapse mainnav-collapse" role="navigation">
+                <ul class="mainnav-menu">
+                    @if ((ProfileType)Session["ProfileType"] == ProfileType.ADMINISTRATOR)
+                    {
+                        <li class="dropdown">
+                            <a href="/admins" title="Relatório de administradores">Administradores&nbsp&nbsp<i class="fa fa-pencil-square"></i></a>
+                        </li>
+                    }
+                    <li class="dropdown">
+                        <a href="/usuarios" title="Relatório de usuários">Usuários&nbsp&nbsp<i class="fa fa-users"></i></a>
+                    </li>
+                    @if ((ProfileType)Session["ProfileType"] == ProfileType.ADMINISTRATOR)
+                    {
+                        <li class="dropdown">
+                            <a href="/categorias" title="Relatório de menus">Categorias&nbsp&nbsp<i class="fa fa-book"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="/produtos" title="Relatório de produtos">Produtos&nbsp&nbsp<i class="fa fa-tags"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="/permissoes" title="Relatório de permissões disponíveis">Permissões&nbsp&nbsp<i class="fa fa-clock-o"></i></a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="/sliders" title="Relatório de sliders">Sliders&nbsp&nbsp<i class="fa fa-file-image-o"></i></a>
+                        </li>
+                    }
+                    <li class="dropdown">
+                        <a href="/respostas/relatorio" title="Relatório de últimas respostas">Últimas Respostas&nbsp&nbsp<i class="fa fa-eye"></i></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="/relatorio" title="Relatório ">Relatório&nbsp&nbsp<i class="fa fa-eye"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+}

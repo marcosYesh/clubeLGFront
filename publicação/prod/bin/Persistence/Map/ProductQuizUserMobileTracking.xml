@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<sqlMap namespace="ProductQuizUserMobileTracking" xmlns="http://ibatis.apache.org/mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+  <alias>
+    <typeAlias alias="ProductQuizUserMobileTrackingAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.ProductQuizUserMobileTracking, MBLabs.LGClubeWebBackendLib" />
+    <typeAlias alias="ProductQuizUserMobileTrackingSearchParameterAlias" type="MBLabs.LGClubeWebBackendLib.Transfer.SearchParameter.ProductQuizUserMobileTrackingSearchParameter, MBLabs.LGClubeWebBackendLib" />
+  </alias>
+  
+  <resultMaps>
+    <resultMap id="ProductQuizUserMobileTrackingResult" class="ProductQuizUserMobileTrackingAlias">
+      <result property="Id"                                 column="id"                             type="Int32"         dbType="integer"/>
+      <result property="UserMobileId"                       column="id_usermobile"                  type="Int32"         dbType="integer"/>
+      <result property="ProductQuizId"                      column="id_product_quiz"                type="Int32"         dbType="integer"/>
+      <result property="ProductQuizItemId"                  column="id_product_quiz_item"           type="Int32"         dbType="integer"/>
+      <result property="TrackingEventType"                  column="int_tracking_event_type"        type="MBLabs.LGClubeWebBackendLib.Enumerator.TrackingEventType"         dbType="integer"/>
+      <result property="TrackingEventValue"                 column="str_tracking_event"             type="String"        dbType="varchar"/>
+      <result property="InsertByUserId"                     column="id_insert_by"                   type="Int32"         dbType="integer"/>
+      <result property="UpdateByUserId"                     column="id_update_by"                   type="Int32"         dbType="integer"/>
+      <result property="DtInsert"                           column="dt_insert"                      type="DateTime"      dbType="datetime"/>
+      <result property="DtUpdate"                           column="dt_update"                      type="DateTime"      dbType="datetime"/>
+      <result property="IsActive"                           column="ind_active"                     type="Boolean"       dbType="bit"/>
+    </resultMap>
+  </resultMaps>
+
+  <statements>
+
+    <select id="SelectAll" resultMap="ProductQuizUserMobileTrackingResult">
+      <![CDATA[
+        select id, id_usermobile, id_product_quiz, id_product_quiz_item, int_tracking_event_type, str_tracking_event, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+        from tb_product_quiz_usermobile_tracking
+      ]]>
+    </select>
+
+    <select id="SelectById" resultMap="ProductQuizUserMobileTrackingResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id = #value#
+      ]]>
+    </select>
+
+    <select id="SelectByProductId" resultMap="ProductQuizUserMobileTrackingResult" extends="SelectAll" parameterClass="Int32">
+      <![CDATA[
+        where id_product = #value# and ind_active = 1
+      ]]>
+    </select>
+
+    <select id="SelectBySearchParameter" parameterClass="ProductQuizSearchParameterAlias" resultMap="ProductQuizUserMobileTrackingResult">
+      <![CDATA[
+            select id, id_usermobile, id_product_quiz, id_product_quiz_item, int_tracking_event_type, str_tracking_event, id_insert_by, id_update_by, dt_insert, dt_update, ind_active
+            from    ( 
+                       select 
+                          row_number() over ( order by id ) as RowNum, *
+                       from 
+                          tb_product_quiz_usermobile_tracking
+                       where
+                          ind_active = 1
+                          ]]>
+      <dynamic>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[id_product = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                    ) AS RowConstrainedResult
+            where RowConstrainedResult.RowNum > #PageStart# AND RowConstrainedResult.RowNum <= #PageEnd#
+            order by RowConstrainedResult.RowNum 
+          ]]>
+    </select>
+
+    <select id="CountBySearchParameter" parameterClass="ProductQuizSearchParameterAlias" resultClass="Int32">
+      <![CDATA[
+            select  count(*)
+            from    ( 
+                       select 
+                        row_number() over ( order by id ) as RowNum, *
+                       from 
+                        tb_product_quiz_usermobile_tracking
+                      where
+                        ind_active = 1
+                        ]]>
+      <dynamic>
+        <isNotNull property="ProductId" prepend="AND">
+          <![CDATA[id_product = #ProductId#]]>
+        </isNotNull>
+        <isNotNull property="DtBegin" prepend="AND">
+          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+        </isNotNull>
+        <isNotNull property="DtEnd" prepend="AND">
+          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+        </isNotNull>
+      </dynamic>
+      <![CDATA[
+                     ) AS RowConstrainedResult
+        ]]>
+    </select>
+
+    <statement id="Insert" parameterClass="ProductQuizUserMobileTrackingAlias" resultClass="Int32">
+      <![CDATA[
+        insert into tb_product_quiz_usermobile_tracking (id_usermobile, id_product_quiz, id_product_quiz_item, int_tracking_event_type, str_tracking_event, id_insert_by, id_update_by, dt_insert, dt_update, ind_active)
+        values (#UserMobileId#, #ProductQuizId#, #ProductQuizItemId#, #TrackingEventType#, #TrackingEventValue#, #InsertByUserId#, #UpdateByUserId#, #DtInsert#, #DtUpdate#, #IsActive#);
+        select scope_identity()
+      ]]>
+    </statement>
+
+    <update id="Update" parameterClass="ProductQuizUserMobileTrackingAlias">
+      <![CDATA[
+        update 
+          tb_product_quiz_usermobile_tracking 
+        set 
+          id_usermobile = #UserMobileId#, 
+          id_product_quiz = #ProductQuizId#, 
+          id_product_quiz_item = #ProductQuizItemId#, 
+          int_tracking_event_type = #TrackingEventType#,
+          str_tracking_event = #TrackingEventValue#,
+          id_insert_by = #InsertByUserId#, 
+          id_update_by = #UpdateByUserId#, 
+          dt_insert = #DtInsert#, 
+          dt_update = #DtUpdate#, 
+          ind_active = #IsActive#
+        where
+          id = #Id#
+      ]]>
+    </update>
+
+    <delete id="Delete" parameterClass="Int32">
+      <![CDATA[
+        delete from tb_product_quiz_usermobile_tracking
+        where id = #value#
+      ]]>
+    </delete>
+
+  </statements>
+</sqlMap>

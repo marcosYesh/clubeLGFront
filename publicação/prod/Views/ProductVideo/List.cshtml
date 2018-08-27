@@ -1,0 +1,60 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.ProductVideoListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Buscar >> Vídeo</u>
+        </h3>
+
+        <div class="portlet-body">
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <form id="index" method="POST" class="form">
+                    <div class="row container">
+                        <a class="btn btn-danger" href="/produto/@Model.Product.Id/video">Novo Vídeo</a>
+                    </div>
+                </form>
+                <br />
+                <hr />
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+                        {
+                            columns.Add().Encoded(false).Sanitized(false).RenderValueAs((d => @<a href="@d.VideoPath"><video src="@d.VideoPath" style="width: 20px;" /></a>));
+                   columns.Add(model => model.Title).Titled("Título");
+                   columns.Add(model => model.Content).Titled("Conteúdo");
+                   columns.Add(model => model.Prize).Titled("Prêmio");
+                   columns.Add(model => model.Order).Titled("Ordem");
+                   columns.Add(model => model.AnswerCount).Titled("Qtd. Respostas");
+                   columns.Add(model => model.RatingAvg).Titled("Avaliação Média");
+                   columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/video/@d.Id/quizzes'"><i class="fa fa-question"></i></button>));
+                        columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/video/@d.Id/relatorio'"><i class="fa fa-users"></i></button>));
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs((d => @<button class="btn btn-xs btn-primary" onClick="javascript:window.location.href='/produto/@d.ProductId/video/@d.Id'"><i class="fa fa-pencil"></i></button>));
+                            columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/produto/@d.ProductId/video/@d.Id/remover" class="btn btn-xs btn-secondary confirmDialog"><i class="fa fa-times"></i></a>);
+                        })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

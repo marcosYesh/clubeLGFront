@@ -1,0 +1,95 @@
+﻿@model MBLabs.LGClubeWebBackendWeb.Models.UserMobileListModel
+
+@using GridMvc.Html
+@using PagedList.Mvc;
+@using PagedList;
+
+@{
+    ViewBag.Title = "Clube LG";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    html {
+        overflow-y: scroll;
+    }
+</style>
+
+@section styles {
+}
+
+@section scripts {
+}
+
+<div class="container">
+    <div class="portlet">
+        <h3 class="portlet-title">
+            <u>Buscar >> Cliente</u>
+        </h3>
+
+        <div class="portlet-body">
+            <div id="table-1_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                <form id="index" method="POST" class="form">
+                    <div class="row container">
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Nome</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.Name, new { @class = "form-control" })
+                        </div>
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Email</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.Email, new { @class = "form-control" })
+                        </div>
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Id. Canal</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.ChannelId, new { @class = "form-control" })
+                        </div>
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Id. Rede</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.NetworkId, new { @class = "form-control" })
+                        </div>
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Nome da Rede</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.NetworkName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row container">
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Data Início</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.DtBegin, new { @class = "form-control dates" })
+                        </div>
+                        <div class="pull-left" style="margin-right: 5px;">
+                            <label style="display: block">Data Término</label>
+                            @Html.TextBoxFor(m => m.SearchParameter.DtEnd, new { @class = "form-control dates" })
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row container">
+                        <input type="submit" class="btn btn-danger blockButton" value="Buscar" />
+                        <a class="btn btn-secondary blockButton" href="/usuarios/exportar">Exportar</a>
+                    </div>
+                </form>
+                <br />
+                <hr />
+                <div id="div-results">
+                    @Html.Grid(Model.ModelList).Columns(columns =>
+               {
+               columns.Add(model => model.Name).Titled("Nome");
+               columns.Add(model => model.Email).Titled("Email");
+               columns.Add(model => model.NetworkId).Titled("Id. Rede");
+               columns.Add(model => model.NetworkName).Titled("Rede");
+               columns.Add(model => model.ChannelId).Titled("Id. Canal");
+               columns.Add(model => model.TotalPrize).Titled("Pontuação");
+               columns.Add(model => model.VideoViewCount).Titled("Qtd. Treinamentos");
+               columns.Add(model => model.AnswerCount).Titled("Qtd. Respostas");
+               columns.Add(model => model.VideoPerc).Titled("Tx. de Conclusão");
+               columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/usuario/@d.Id/relatorio" class="btn btn-xs btn-secondary"><i class="fa fa-user"></i></a>);
+               columns.Add().Encoded(false).Sanitized(false).SetWidth(15).RenderValueAs(d => @<a href="/usuario/@d.Id/remover" class="btn btn-xs btn-secondary confirmDialog"><i class="fa fa-times"></i></a>);
+               })
+                </div>
+                @Html.PagedListPager((IPagedList)ViewBag.OnePageOfProducts, page => Url.Action("List", new { page }))
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "[ MUNDO IRYS ] OCORREU UM ERRO";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="error-container">
+
+        <div class="error-code">
+            500
+        </div>
+
+        <div class="error-details">
+            <h4>Houve um problema de carregar a página solicitada.</h4>
+            <br>
+            <p><strong>O que eu devo fazer:</strong></p>
+
+            <ul class="icons-list">
+                <li>
+                    <i class="icon-li fa fa-check-square-o"></i>
+                    Você pode atualizar a página, pois pode ser um problema temporário
+                </li>
+                <li>
+                    <i class="icon-li fa fa-check-square-o"></i>
+                    Se você acessou uma url digitada, favor verificar se esta correta
+                </li>
+                <li>
+                    <i class="icon-li fa fa-check-square-o"></i>
+                    Nada! Estamos sendo notificados pelo sistema que este problema ocorreu e vamos corrigir o mais rápido possível
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
