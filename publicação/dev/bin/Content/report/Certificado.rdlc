@@ -16,6 +16,11 @@
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
               <TextRun>
                 <Value>=Fields!nome.Value</Value>
                 <Style>
@@ -45,6 +50,11 @@
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+          <Paragraph>
+            <TextRuns>
               <TextRun>
                 <Value>=Fields!treinamento.Value</Value>
                 <Style>
@@ -68,8 +78,8 @@
         <rd:DefaultName>Textbox7</rd:DefaultName>
         <Top>4.00967cm</Top>
         <Left>0.92287cm</Left>
-        <Height>6.18244cm</Height>
-        <Width>14.20812cm</Width>
+        <Height>8.40494cm</Height>
+        <Width>25.16187cm</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -85,7 +95,7 @@
         <Value>marca_lgCopia</Value>
         <Sizing>FitProportional</Sizing>
         <Top>1.45203cm</Top>
-        <Left>10.56182cm</Left>
+        <Left>21.22453cm</Left>
         <Height>1.82068cm</Height>
         <Width>4.56917cm</Width>
         <ZIndex>1</ZIndex>
@@ -111,13 +121,13 @@
         </Style>
       </Image>
     </ReportItems>
-    <Height>4.35417in</Height>
+    <Height>5.10417in</Height>
     <Style />
   </Body>
-  <Width>6.5in</Width>
+  <Width>10.59375in</Width>
   <Page>
-    <PageHeight>29.7cm</PageHeight>
-    <PageWidth>21cm</PageWidth>
+    <PageHeight>21cm</PageHeight>
+    <PageWidth>29.7cm</PageWidth>
     <LeftMargin>2cm</LeftMargin>
     <RightMargin>2cm</RightMargin>
     <TopMargin>2cm</TopMargin>
