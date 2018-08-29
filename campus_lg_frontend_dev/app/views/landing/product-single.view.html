@@ -272,7 +272,7 @@
                                                         <img ng-if="false" class="img-responsive" src="{{currentProduct.PhotoPath}}">
                                                     </div>
                                                     <div class="featured-modules-item-desc">
-                                                        <span class="text-uppercase">{{productModule.Title}}</span>
+                                                        <span class="text-uppercase">{{productModule.Title}}</span> <input type="text" value="{{productModule.Title}}" />
 
                                                         <div class="featured-modules-item-points-amount" ng-if="productModule.Prize != undefined && productModule.Prize > 0">
                                                             <h3>{{productModule.Prize}} PONTO{{productModule.Prize > 1 ? 'S' : ''}}</h3>
