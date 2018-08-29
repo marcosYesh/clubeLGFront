@@ -12,12 +12,14 @@
                 <Value>Certifico que </Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>36pt</FontSize>
+                  <FontSize>28pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style />
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
           </Paragraph>
           <Paragraph>
             <TextRuns>
@@ -25,7 +27,7 @@
                 <Value>=Fields!nome.Value</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>36pt</FontSize>
+                  <FontSize>28pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -33,12 +35,14 @@
                 <Value>,</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>36pt</FontSize>
+                  <FontSize>28pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style />
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
           </Paragraph>
           <Paragraph>
             <TextRuns>
@@ -46,12 +50,14 @@
                 <Value>Conclui o treinamento de </Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>36pt</FontSize>
+                  <FontSize>28pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style />
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
           </Paragraph>
           <Paragraph>
             <TextRuns>
@@ -59,7 +65,7 @@
                 <Value>=Fields!treinamento.Value</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>36pt</FontSize>
+                  <FontSize>28pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -67,12 +73,14 @@
                 <Value>.</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>36pt</FontSize>
+                  <FontSize>28pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
             </TextRuns>
-            <Style />
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox7</rd:DefaultName>
