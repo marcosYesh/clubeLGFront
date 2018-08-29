@@ -1,3 +1,10 @@
+<script>
+	function myFunction() {
+		var nome = "Antonio Marcos de Campos";
+		var treinamento = "Lg Audio e Video";
+		window.open("http://campuslgadmdev.mblabs.com.br/certificado?nome="+nome+"&treinamento="treinamento);
+	}
+</script>
 <section class="product-single relative" ng-controller="MainController">
     <div class="section-loading" ng-show="$root.sectionLoading">
         <div class="section-loading-inner">
@@ -70,13 +77,7 @@
                     <div class="progress-loader-container">
                         <div id="mainProgressLoaderInner"></div>
 						<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
-						<script>
-								function myFunction() {
-									var nome = "Antonio Marcos de Campos";
-									var treinamento = "Lg Audio e Video";
-									window.open("http://campuslgadmdev.mblabs.com.br/certificado?nome="+nome+"&treinamento="treinamento);
-								}
-						</script>
+						
                     </div>
                 </div>
 
