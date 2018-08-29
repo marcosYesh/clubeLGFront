@@ -1,5 +1,4 @@
 <section class="product-single relative" ng-controller="MainController">
-    <button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
     <div class="section-loading" ng-show="$root.sectionLoading">
         <div class="section-loading-inner">
             <img src="assets/img/loader.svg">
@@ -52,11 +51,9 @@
             </div>
 		</div>
     </div>
-	<button class="btn-success" onclick="myFunction()">Gerar Certificado </button>
 </section>
 
 <section class="landing-section product-video-section gray-pattern-bg">
-    <button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
     <div class="container">
         <div class="product-video-section-inner relative {{!currentProduct.ProductHasVideos ? 'no-min-height' : ''}}">
             
@@ -64,6 +61,7 @@
                 <div class="section-loading-inner">
                     <img src="assets/img/loader.svg">
                     <div>Carregando...</div>
+					<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
                 </div>
             </div>
 
@@ -72,6 +70,7 @@
 				<div class="col-md-3">
                     <div class="progress-loader-container">
                         <div id="mainProgressLoaderInner"></div>
+						<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
                     </div>
                 </div>
 
@@ -242,6 +241,7 @@
                     <div class="featured-modules-container">
                         <div class="section-title">
                             <h2>Módulos deste treinamento</h2>
+							<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
                             <div class="section-title-divider"></div>
                         </div>
                         <div class="featured-modules-inner">
@@ -255,6 +255,7 @@
 
                                                 <div class="video-viewering text-center" ng-if="currentVideoId == productModule.Id">
                                                     VISUALIZANDO <i class="fa fa-play" aria-hidden="true"></i>
+													<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
                                                 </div>
 
                                                 <a class="featured-modules-item-link product-featured-modules-item-link" ng-click="changecurrentWatchingVideo(productModule)">
@@ -262,7 +263,9 @@
                                                         <img ng-if="false" class="img-responsive" src="{{currentProduct.PhotoPath}}">
                                                     </div>
                                                     <div class="featured-modules-item-desc">
-                                                        <span class="text-uppercase">{{productModule.Title}}</span>
+                                                        <button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
+														<span class="text-uppercase">{{productModule.Title}}</span>
+														
 
                                                         <div class="featured-modules-item-points-amount" ng-if="productModule.Prize != undefined && productModule.Prize > 0">
                                                             <h3>{{productModule.Prize}} PONTO{{productModule.Prize > 1 ? 'S' : ''}}</h3>
@@ -273,7 +276,7 @@
                                                         <p>{{productModule.Content}}</p>
                                                     </div>
                                                 </a>
-                                                <div class="already-shown-mask">MÓDULO JÁ VISUALIZADO</div>
+                                                <div class="already-shown-mask">MÓDULO JÁ VISUALIZADO  <button class="btn-success" onclick="myFunction()">Gerar Certificado </button> </div>
                                             </div>
                                         </div>
                                     </div>
@@ -319,6 +322,7 @@
                                             <span>
                                                 {{categoryItem.MenuCategory.Name}}<br>
                                                 <small>{{categoryItem.ProductCount}} produto{{categoryItem.ProductCount > 1 ? 's' : ''}}</small>
+												<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
                                             </span>
                                             </a>
                                         </div>
