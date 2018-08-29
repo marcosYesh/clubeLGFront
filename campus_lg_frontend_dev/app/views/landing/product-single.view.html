@@ -1,11 +1,5 @@
-<script>
-	function myFunction() {
-		var nome = "Antonio Marcos de Campos";
-		var treinamento = "Lg Audio e Video";
-		window.open("http://campuslgadmdev.mblabs.com.br/certificado?nome="+nome+"&treinamento="treinamento);
-	}
-</script>
 <section class="product-single relative" ng-controller="MainController">
+
     <div class="section-loading" ng-show="$root.sectionLoading">
         <div class="section-loading-inner">
             <img src="assets/img/loader.svg">
@@ -56,14 +50,19 @@
                     </div>
                 </div>
             </div>
-		</div>
+        </div>
+		
     </div>
 </section>
-
+<script>
+function myFunction() {
+    window.open("http://campuslgadmdev.mblabs.com.br/certificado");
+}
+</script>
 <section class="landing-section product-video-section gray-pattern-bg">
     <div class="container">
         <div class="product-video-section-inner relative {{!currentProduct.ProductHasVideos ? 'no-min-height' : ''}}">
-            
+
             <div class="section-loading" ng-show="$root.sectionLoading">
                 <div class="section-loading-inner">
                     <img src="assets/img/loader.svg">
@@ -72,12 +71,12 @@
             </div>
 
             <div class="row" ng-if="currentProduct.ProductHasVideos" ng-show="!$root.sectionLoading">
-                
-				<div class="col-md-3">
+                <div class="col-md-3">
                     <div class="progress-loader-container">
                         <div id="mainProgressLoaderInner"></div>
-						<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
-						
+						<div> 
+							<button class="btn-success" onclick="myFunction()">Gerar Certificado </button>
+						</div>
                     </div>
                 </div>
 
@@ -86,7 +85,7 @@
                         <section class="ng-video-container">
 
                             <div class="video-mask text-center finished-video-mask" ng-if="!currentWatchingVideo.FirstlyPlayed">
-								<div class="finished-video-mask-inner">
+                                <div class="finished-video-mask-inner">
                                     <br>
                                     <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong>
                                     <br>
@@ -103,6 +102,7 @@
                             </div>
 
                             <div class="video-mask" ng-if="currentWatchingVideo.ShowVideoMask && currentWatchingVideo.FirstlyPlayed">
+                                <div class="video-inner-container">
                                     <div class="video-inner-container-table">
                                         <div class="video-question-single" ng-repeat="(index, question) in currentWatchingVideo.ProductVideoQuestionList | orderBy: '+ShowtimeRaw'" ng-show="quizNumber == (index + 1)">
 
@@ -248,7 +248,6 @@
                     <div class="featured-modules-container">
                         <div class="section-title">
                             <h2>Módulos deste treinamento</h2>
-
                             <div class="section-title-divider"></div>
                         </div>
                         <div class="featured-modules-inner">
@@ -262,7 +261,6 @@
 
                                                 <div class="video-viewering text-center" ng-if="currentVideoId == productModule.Id">
                                                     VISUALIZANDO <i class="fa fa-play" aria-hidden="true"></i>
-													<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
                                                 </div>
 
                                                 <a class="featured-modules-item-link product-featured-modules-item-link" ng-click="changecurrentWatchingVideo(productModule)">
@@ -270,19 +268,17 @@
                                                         <img ng-if="false" class="img-responsive" src="{{currentProduct.PhotoPath}}">
                                                     </div>
                                                     <div class="featured-modules-item-desc">
-														<span class="text-uppercase">{{productModule.Title}}</span>
-														
+                                                        <span class="text-uppercase">{{productModule.Title}}</span>
 
                                                         <div class="featured-modules-item-points-amount" ng-if="productModule.Prize != undefined && productModule.Prize > 0">
                                                             <h3>{{productModule.Prize}} PONTO{{productModule.Prize > 1 ? 'S' : ''}}</h3>
-															
                                                         </div>
 
                                                         <div class="section-title-divider"></div>
                                                         <p>{{productModule.Content}}</p>
                                                     </div>
                                                 </a>
-                                                <div class="already-shown-mask">MÓDULO JÁ VISUALIZADO  <button class="btn-success" onclick="myFunction()">Gerar Certificado </button> </div>
+                                                <div class="already-shown-mask">MÓDULO JÁ VISUALIZADO</div>
                                             </div>
                                         </div>
                                     </div>
@@ -294,10 +290,10 @@
                 </div>
             </div>
         </div>
-section>
+</section>
 
-<section class="landing-section categories-section relative"> 
-	<div class="categories-section-inner">
+<section class="landing-section categories-section relative">
+    <div class="categories-section-inner">
         <div class="container with-z-index">
             <div class="row text-center">
                 <div class="col-md-12">
