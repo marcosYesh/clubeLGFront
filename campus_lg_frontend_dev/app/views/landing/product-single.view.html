@@ -52,15 +52,11 @@
             </div>
         </div>
 		<div> 
-		   <button class="btn-success" onclick="myFunction()">Gerar Certificado </button>
+		   
 		</div>
     </div>
 </section>
-<script>
-function myFunction() {
-    window.open("http://campuslgadmdev.mblabs.com.br/certificado");
-}
-</script>
+
 <section class="landing-section product-video-section gray-pattern-bg">
     <div class="container">
         <div class="product-video-section-inner relative {{!currentProduct.ProductHasVideos ? 'no-min-height' : ''}}">
@@ -271,6 +267,7 @@ function myFunction() {
 
                                                         <div class="featured-modules-item-points-amount" ng-if="productModule.Prize != undefined && productModule.Prize > 0">
                                                             <h3>{{productModule.Prize}} PONTO{{productModule.Prize > 1 ? 'S' : ''}}</h3>
+															<button class="btn-success" onclick="myFunction()">Gerar Certificado </button>
                                                         </div>
 
                                                         <div class="section-title-divider"></div>
@@ -343,3 +340,8 @@ function myFunction() {
         </div>
     </div>
 </section>
+<script>
+function myFunction() {
+    window.open("http://campuslgadmdev.mblabs.com.br/certificado");
+}
+</script>
