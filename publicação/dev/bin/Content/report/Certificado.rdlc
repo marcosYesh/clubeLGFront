@@ -12,7 +12,7 @@
                 <Value>Certifico que </Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>28pt</FontSize>
+                  <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -27,7 +27,7 @@
                 <Value>=Fields!nome.Value</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>28pt</FontSize>
+                  <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -35,7 +35,7 @@
                 <Value>,</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>28pt</FontSize>
+                  <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -50,7 +50,7 @@
                 <Value>Conclui o treinamento de </Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>28pt</FontSize>
+                  <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -65,7 +65,7 @@
                 <Value>=Fields!treinamento.Value</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>28pt</FontSize>
+                  <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -73,7 +73,7 @@
                 <Value>.</Value>
                 <Style>
                   <FontFamily>Kunstler Script</FontFamily>
-                  <FontSize>28pt</FontSize>
+                  <FontSize>24pt</FontSize>
                   <FontWeight>Bold</FontWeight>
                 </Style>
               </TextRun>
@@ -84,9 +84,9 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox7</rd:DefaultName>
-        <Top>4.00967cm</Top>
+        <Top>0.14111cm</Top>
         <Left>0.92287cm</Left>
-        <Height>8.40494cm</Height>
+        <Height>12.2735cm</Height>
         <Width>25.16187cm</Width>
         <Style>
           <Border>
@@ -98,42 +98,52 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Image Name="Image2">
-        <Source>Embedded</Source>
-        <Value>marca_lgCopia</Value>
-        <Sizing>FitProportional</Sizing>
-        <Top>1.45203cm</Top>
-        <Left>21.22453cm</Left>
-        <Height>1.82068cm</Height>
-        <Width>4.56917cm</Width>
-        <ZIndex>1</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
-      <Image Name="Image1">
-        <Source>Embedded</Source>
-        <Value>loader</Value>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.79375cm</Top>
-        <Left>0.92287cm</Left>
-        <Height>2.47896cm</Height>
-        <Width>2.87583cm</Width>
-        <ZIndex>2</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
     </ReportItems>
     <Height>5.10417in</Height>
     <Style />
   </Body>
   <Width>10.59375in</Width>
   <Page>
+    <PageHeader>
+      <Height>2.54952cm</Height>
+      <PrintOnFirstPage>true</PrintOnFirstPage>
+      <PrintOnLastPage>true</PrintOnLastPage>
+      <ReportItems>
+        <Image Name="Image1">
+          <Source>Embedded</Source>
+          <Value>loader</Value>
+          <Sizing>FitProportional</Sizing>
+          <Left>0.92287cm</Left>
+          <Height>2.47896cm</Height>
+          <Width>2.87583cm</Width>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Image>
+        <Image Name="Image2">
+          <Source>Embedded</Source>
+          <Value>marca_lgCopia</Value>
+          <Sizing>FitProportional</Sizing>
+          <Top>0.623cm</Top>
+          <Left>20.90703cm</Left>
+          <Height>1.82068cm</Height>
+          <Width>4.56917cm</Width>
+          <ZIndex>1</ZIndex>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </Image>
+      </ReportItems>
+      <Style>
+        <Border>
+          <Style>None</Style>
+        </Border>
+      </Style>
+    </PageHeader>
     <PageHeight>21cm</PageHeight>
     <PageWidth>29.7cm</PageWidth>
     <LeftMargin>2cm</LeftMargin>
