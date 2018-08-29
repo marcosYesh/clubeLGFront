@@ -20,7 +20,8 @@
 
             <div class="col-md-8">
                 <div class="section-title">
-                    <h2>{{currentProduct.Name}}</h2>
+                    <h2 id="lblProduto" >{{currentProduct.Name}}</h2>
+					
                     <div class="section-title-divider"></div>
                 </div>
                 <p>
@@ -56,6 +57,7 @@
 </section>
 <script>
 	function myFunction() {
+	    alert($("#lblProduto").text());
 		var nome = "Antonio Marcos de Campos";
 		var treinamento = "Lg Audio e Video";
 		window.open("http://campuslgadmdev.mblabs.com.br/certificado?nome="+nome+"&treinamento="+treinamento);
@@ -91,7 +93,7 @@
                             <div class="video-mask text-center finished-video-mask" ng-if="!currentWatchingVideo.FirstlyPlayed">
                                 <div class="finished-video-mask-inner">
                                     <br>
-                                    <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong> <input type="text" value="{{currentWatchingVideo.Title}}" />
+                                    <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong> 
                                     <br>
                                     <br>
                                     <p class="inner-video-desc" ng-if="currentWatchingVideoQuestions.QuestionsCount > 0">Este treinamento é composto por {{currentWatchingVideoQuestions.QuestionsCount}} quest{{currentWatchingVideoQuestions.QuestionsCount > 1 ? 'ões' : 'ão'}}, por favor assista com atenção e responda corretamente.</p>
