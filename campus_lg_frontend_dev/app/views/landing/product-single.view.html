@@ -78,7 +78,6 @@
                         <section class="ng-video-container">
 
                             <div class="video-mask text-center finished-video-mask" ng-if="!currentWatchingVideo.FirstlyPlayed">
-                                <div>video-mask text-center finished-video-mask</div>  
 								<div class="finished-video-mask-inner">
                                     <br>
                                     <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong>
@@ -96,8 +95,6 @@
                             </div>
 
                             <div class="video-mask" ng-if="currentWatchingVideo.ShowVideoMask && currentWatchingVideo.FirstlyPlayed">
-							    <div>video-mask</div>  
-                                <div class="video-inner-container">
                                     <div class="video-inner-container-table">
                                         <div class="video-question-single" ng-repeat="(index, question) in currentWatchingVideo.ProductVideoQuestionList | orderBy: '+ShowtimeRaw'" ng-show="quizNumber == (index + 1)">
 
@@ -155,7 +152,6 @@
                             </div>
 
                             <div class="video-mask text-center finished-video-mask" ng-if="currentWatchingVideo.videoFinished">
-							<div>video-mask text-center finished-video-mask</div> 
                                 <div class="finished-video-mask-inner">
                                     <br>
                                     <strong>Treinamento finalizado!</strong>
@@ -238,7 +234,6 @@
     </div>
 
     <div class="red-pattern" ng-if="currentProduct.ProductHasVideos">
-	    <div>red-pattern</div>
         <div class="container">
             <div class="row product-more-videos">
                 <div class="col-md-12">
@@ -291,7 +286,6 @@
 </section>
 
 <section class="landing-section categories-section relative"> 
-    <div>landing-section categories-section relative</div>
 	<div class="categories-section-inner">
         <div class="container with-z-index">
             <div class="row text-center">
