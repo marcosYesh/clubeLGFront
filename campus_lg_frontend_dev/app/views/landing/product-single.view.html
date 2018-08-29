@@ -57,7 +57,7 @@
 <section class="landing-section product-video-section gray-pattern-bg">
     <div class="container">
         <div class="product-video-section-inner relative {{!currentProduct.ProductHasVideos ? 'no-min-height' : ''}}">
-            <div>product-video-section-inner relative</div> 
+            
             <div class="section-loading" ng-show="$root.sectionLoading">
                 <div class="section-loading-inner">
                     <img src="assets/img/loader.svg">
@@ -66,7 +66,7 @@
             </div>
 
             <div class="row" ng-if="currentProduct.ProductHasVideos" ng-show="!$root.sectionLoading">
-                <div>currentProduct.ProductHasVideos</div> 
+                
 				<div class="col-md-3">
                     <div class="progress-loader-container">
                         <div id="mainProgressLoaderInner"></div>
@@ -78,7 +78,8 @@
                         <section class="ng-video-container">
 
                             <div class="video-mask text-center finished-video-mask" ng-if="!currentWatchingVideo.FirstlyPlayed">
-                                <div class="finished-video-mask-inner">
+                                <div>video-mask text-center finished-video-mask</div>  
+								<div class="finished-video-mask-inner">
                                     <br>
                                     <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong>
                                     <br>
@@ -95,6 +96,7 @@
                             </div>
 
                             <div class="video-mask" ng-if="currentWatchingVideo.ShowVideoMask && currentWatchingVideo.FirstlyPlayed">
+							    <div>video-mask</div>  
                                 <div class="video-inner-container">
                                     <div class="video-inner-container-table">
                                         <div class="video-question-single" ng-repeat="(index, question) in currentWatchingVideo.ProductVideoQuestionList | orderBy: '+ShowtimeRaw'" ng-show="quizNumber == (index + 1)">
@@ -153,6 +155,7 @@
                             </div>
 
                             <div class="video-mask text-center finished-video-mask" ng-if="currentWatchingVideo.videoFinished">
+							<div>video-mask text-center finished-video-mask</div> 
                                 <div class="finished-video-mask-inner">
                                     <br>
                                     <strong>Treinamento finalizado!</strong>
