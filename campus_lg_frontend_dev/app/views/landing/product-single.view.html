@@ -79,7 +79,7 @@
                         <div id="mainProgressLoaderInner"></div>
                     </div>
 					<div style="text-align:center;"> 
-						<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> <input type="text" value="{{productModule.Title}}" />
+						<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> 
 					</div>
                 </div>
 				
@@ -91,7 +91,7 @@
                             <div class="video-mask text-center finished-video-mask" ng-if="!currentWatchingVideo.FirstlyPlayed">
                                 <div class="finished-video-mask-inner">
                                     <br>
-                                    <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong>
+                                    <strong class="text-uppercase text-center">{{currentWatchingVideo.Title}}</strong> <input type="text" value="{{currentWatchingVideo.Title}}" />
                                     <br>
                                     <br>
                                     <p class="inner-video-desc" ng-if="currentWatchingVideoQuestions.QuestionsCount > 0">Este treinamento é composto por {{currentWatchingVideoQuestions.QuestionsCount}} quest{{currentWatchingVideoQuestions.QuestionsCount > 1 ? 'ões' : 'ão'}}, por favor assista com atenção e responda corretamente.</p>
