@@ -79,7 +79,7 @@
                         <div id="mainProgressLoaderInner"></div>
                     </div>
 					<div style="text-align:center;"> 
-						<button class="btn-success" onclick="myFunction()">Gerar Certificado </button>
+						<button class="btn-success" onclick="myFunction()">Gerar Certificado </button> <input type="text" value="{{productModule.Title}}" />
 					</div>
                 </div>
 				
@@ -272,7 +272,7 @@
                                                         <img ng-if="false" class="img-responsive" src="{{currentProduct.PhotoPath}}">
                                                     </div>
                                                     <div class="featured-modules-item-desc">
-                                                        <span class="text-uppercase">{{productModule.Title}}</span> <input type="text" value="{{productModule.Title}}" />
+                                                        <span class="text-uppercase">{{productModule.Title}}</span> 
 
                                                         <div class="featured-modules-item-points-amount" ng-if="productModule.Prize != undefined && productModule.Prize > 0">
                                                             <h3>{{productModule.Prize}} PONTO{{productModule.Prize > 1 ? 'S' : ''}}</h3>
