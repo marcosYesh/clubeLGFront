@@ -22,7 +22,7 @@
                     <a>
                         <strong class="text-uppercase">
                             <img class="user-thumb  img-circle" src="{{$root.userProfile.PhotoUrl != null ? $root.userProfile.PhotoUrl : '/assets/img/dummy_user.png'}}">
-                            <span>{{$root.userProfile.Name.split(' ')[0]}}</span>
+                            <span id="lblNomeUser">{{$root.userProfile.Name.split(' ')[0]}}</span>
                         </strong>
                     </a>
                     <div class="navbar-user-panel-bar">
