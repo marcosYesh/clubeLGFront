@@ -50,9 +50,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-		<div> 
-		   
 		</div>
     </div>
 </section>
@@ -60,7 +57,7 @@
 <section class="landing-section product-video-section gray-pattern-bg">
     <div class="container">
         <div class="product-video-section-inner relative {{!currentProduct.ProductHasVideos ? 'no-min-height' : ''}}">
-
+            <div>product-video-section-inner relative</div> 
             <div class="section-loading" ng-show="$root.sectionLoading">
                 <div class="section-loading-inner">
                     <img src="assets/img/loader.svg">
@@ -69,7 +66,8 @@
             </div>
 
             <div class="row" ng-if="currentProduct.ProductHasVideos" ng-show="!$root.sectionLoading">
-                <div class="col-md-3">
+                <div>currentProduct.ProductHasVideos</div> 
+				<div class="col-md-3">
                     <div class="progress-loader-container">
                         <div id="mainProgressLoaderInner"></div>
                     </div>
@@ -237,6 +235,7 @@
     </div>
 
     <div class="red-pattern" ng-if="currentProduct.ProductHasVideos">
+	    <div>red-pattern</div>
         <div class="container">
             <div class="row product-more-videos">
                 <div class="col-md-12">
@@ -267,7 +266,7 @@
 
                                                         <div class="featured-modules-item-points-amount" ng-if="productModule.Prize != undefined && productModule.Prize > 0">
                                                             <h3>{{productModule.Prize}} PONTO{{productModule.Prize > 1 ? 'S' : ''}}</h3>
-															<button class="btn-success" onclick="myFunction()">Gerar Certificado </button>
+															
                                                         </div>
 
                                                         <div class="section-title-divider"></div>
@@ -288,8 +287,9 @@
         </div>
 </section>
 
-<section class="landing-section categories-section relative">
-    <div class="categories-section-inner">
+<section class="landing-section categories-section relative"> 
+    <div>landing-section categories-section relative</div>
+	<div class="categories-section-inner">
         <div class="container with-z-index">
             <div class="row text-center">
                 <div class="col-md-12">
@@ -341,6 +341,7 @@
     </div>
 </section>
 <script>
+<button class="btn-success" onclick="myFunction()">Gerar Certificado </button>
 function myFunction() {
     window.open("http://campuslgadmdev.mblabs.com.br/certificado");
 }
