@@ -71,10 +71,10 @@
           <![CDATA[str_name LIKE '%$Name$%']]>
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
-          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+          <![CDATA[convert(date, dt_insert) >= #DtBegin#]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
-          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+          <![CDATA[convert(date, dt_insert) <= #DtEnd#]]>
         </isNotNull>
       </dynamic>
       <![CDATA[
@@ -100,10 +100,10 @@
           <![CDATA[str_name LIKE '%$Name$%']]>
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
-          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+          <![CDATA[convert(date, dt_insert) >= #DtBegin#]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
-          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+          <![CDATA[convert(date, dt_insert) <= #DtEnd#]]>
         </isNotNull>
       </dynamic>
       <![CDATA[

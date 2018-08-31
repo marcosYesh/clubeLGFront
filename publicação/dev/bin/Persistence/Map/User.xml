@@ -64,10 +64,10 @@
           <![CDATA[str_name LIKE '%$Name$%']]>
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
-          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+          <![CDATA[convert(date, dt_insert) >= #DtBegin#]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
-          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+          <![CDATA[convert(date, dt_insert) <=  #DtEnd#]]>
         </isNotNull>
         <isNotNull property="ProfileType" prepend="AND">
           int_profile_type = #ProfileType#
@@ -96,10 +96,10 @@
           <![CDATA[str_name LIKE '%$Name$%']]>
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
-          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+          <![CDATA[convert(date, dt_insert) >= #DtBegin#]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
-          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+          <![CDATA[convert(date, dt_insert) <=  #DtEnd#]]>
         </isNotNull>
         <isNotNull property="ProfileType" prepend="AND">
           int_profile_type = #ProfileType#

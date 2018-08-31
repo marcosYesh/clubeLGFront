@@ -62,10 +62,10 @@
           <![CDATA[id_product = #ProductId#]]>
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
-          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+          <![CDATA[convert(date, dt_insert) >= #DtBegin#]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
-          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+          <![CDATA[convert(date, dt_insert) <=  #DtEnd#]]>
         </isNotNull>
       </dynamic>
       <![CDATA[
@@ -91,10 +91,10 @@
           <![CDATA[id_product = #ProductId#]]>
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
-          <![CDATA[convert(date, dt_insert) >= convert(date, #DtBegin#)]]>
+          <![CDATA[convert(date, dt_insert) >= #DtBegin#]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
-          <![CDATA[convert(date, dt_insert) <= convert(date, #DtEnd#)]]>
+          <![CDATA[convert(date, dt_insert) <=  #DtEnd#]]>
         </isNotNull>
       </dynamic>
       <![CDATA[

@@ -83,12 +83,12 @@
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
           <![CDATA[ 
-                convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+                convert(date, prize.dt_view) >= #DtBegin#
             ]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
           <![CDATA[ 
-                convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+                convert(date, prize.dt_view) <=  #DtEnd#
             ]]>
         </isNotNull>
       </dynamic>
@@ -139,12 +139,12 @@
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
           <![CDATA[ 
-                convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+                convert(date, prize.dt_view) >= #DtBegin#
             ]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
           <![CDATA[ 
-                convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+                convert(date, prize.dt_view) <= #DtEnd#
             ]]>
         </isNotNull>
       </dynamic>
@@ -192,12 +192,12 @@
               </isNotNull>
               <isNotNull property="DtBegin" prepend="AND">
                 <![CDATA[ 
-                      convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+                      convert(date, prize.dt_view) >= #DtBegin#
                   ]]>
               </isNotNull>
               <isNotNull property="DtEnd" prepend="AND">
                 <![CDATA[ 
-                      convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+                      convert(date, prize.dt_view) <= #DtEnd#
                   ]]>
               </isNotNull>
             </dynamic>
@@ -234,12 +234,12 @@
         </isNotNull>
         <isNotNull property="DtBegin" prepend="AND">
           <![CDATA[ 
-                      convert(date, prize.dt_view) >= convert(date, #DtBegin#)
+                      convert(date, prize.dt_view) >= #DtBegin#
                   ]]>
         </isNotNull>
         <isNotNull property="DtEnd" prepend="AND">
           <![CDATA[ 
-                      convert(date, prize.dt_view) <= convert(date, #DtEnd#)
+                      convert(date, prize.dt_view) <= #DtEnd#
                   ]]>
         </isNotNull>
       </dynamic>
